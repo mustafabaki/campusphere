@@ -10,7 +10,6 @@ import com.sudobuild.campusphere_backend.student_module.services.StudentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest(properties = {
         "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL",
+        "spring.datasource.username=sa",
+        "spring.datasource.password=",
         "spring.datasource.driver-class-name=org.h2.Driver"
 })
 @Transactional
@@ -51,4 +52,25 @@ public class StudentServiceTest {
         assertNotNull(studentResponseDTO);
         assertEquals(studentResponseDTO.getId(), savedStudent.getId());
     }
+
+    @Test
+    public void shouldRetrieveStudentByEmail() {
+        // Arrange
+        Student student = new Student();
+        student.setName("Jane Doe");
+        student.setEmail("jane.doe@example.com");
+        student.setPhone("9876543210");
+        student.setProfilePictureURL("https://example.com/jane_profile.jpg");
+        student.setDepartment(Department.MECHANICAL_ENGINEERING);
+        studentRepository.save(student);
+
+        // Act
+        StudentResponseDTO retrievedStudent = studentService.getStudentByEmail("jane.doe@example.com");
+
+        // Assert
+        assertNotNull(retrievedStudent);
+        assertEquals("Jane Doe", retrievedStudent.getName());
+        assertEquals("jane.doe@example.com", retrievedStudent.getEmail());
+    }
+
 }
