@@ -19,7 +19,7 @@ public class StudentMapper {
         return student;
     }
 
-    public StudentResponseDTO toStudentResponseDTO(@NotNull Student student){
+    public StudentResponseDTO toStudentResponseDTO(@NotNull Student student) {
         StudentResponseDTO studentResponseDTO = new StudentResponseDTO();
         studentResponseDTO.setId(student.getId());
         studentResponseDTO.setName(student.getName());
@@ -29,6 +29,7 @@ public class StudentMapper {
         studentResponseDTO.setProfilePictureURL(student.getProfilePictureURL());
         studentResponseDTO.setEnrolledClubs(student.getEnrolledClubs());
         studentResponseDTO.setSocialLinks(student.getSocialLinks());
+        studentResponseDTO.setDepartment(student.getDepartment());
         return studentResponseDTO;
     }
 }
