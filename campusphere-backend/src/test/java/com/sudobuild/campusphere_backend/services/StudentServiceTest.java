@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
         "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL",
         "spring.datasource.driver-class-name=org.h2.Driver"
 })
-@ActiveProfiles("test") // This looks for application-test.yml
 @Transactional
 public class StudentServiceTest {
     @Autowired
