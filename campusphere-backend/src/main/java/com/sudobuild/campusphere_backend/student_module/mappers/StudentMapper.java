@@ -10,11 +10,12 @@ import org.springframework.stereotype.Component;
 public class StudentMapper {
     public Student toStudent(@NotNull StudentCreateDTO studentDTO) {
         Student student = new Student();
-        student.setId(studentDTO.getId());
         student.setName(studentDTO.getName());
         student.setSurname(studentDTO.getSurname());
         student.setEmail(studentDTO.getEmail());
         student.setPhone(studentDTO.getPhone());
+        student.setDepartment(studentDTO.getDepartment());
+        student.setProfilePictureURL(studentDTO.getProfilePictureURL());
         return student;
     }
 

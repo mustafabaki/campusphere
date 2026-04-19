@@ -12,8 +12,6 @@ import java.util.List;
 @Getter
 @Setter
 public class StudentCreateDTO {
-
-    private String id;
     private String name;
     private String surname;
     private String email;
