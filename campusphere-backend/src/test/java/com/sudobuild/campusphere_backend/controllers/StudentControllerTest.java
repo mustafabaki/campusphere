@@ -5,8 +5,11 @@ import com.sudobuild.campusphere_backend.auxiliary.ApiResponse;
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentCreateDTO;
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentResponseDTO;
 import com.sudobuild.campusphere_backend.student_module.enums.Department;
+import com.sudobuild.campusphere_backend.student_module.mappers.StudentMapper;
+import com.sudobuild.campusphere_backend.student_module.repositories.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.TestPropertySource;
@@ -32,6 +35,11 @@ public class StudentControllerTest {
 
     RestTestClient client;
     ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
+    private StudentMapper studentMapper;
 
     @BeforeEach
     void setUp() {
@@ -61,5 +69,36 @@ public class StudentControllerTest {
                     assertEquals("Jane", student.getName());
                     assertEquals("Doe", student.getSurname());
                 });
+    }
+
+    @Test
+    void getStudentByEmail() {
+        // create student
+        StudentCreateDTO studentCreateDTO = new StudentCreateDTO();
+        studentCreateDTO.setName("Jane");
+        studentCreateDTO.setSurname("Doe");
+        studentCreateDTO.setEmail("jane@doe.com");
+        studentCreateDTO.setDepartment(Department.BIOLOGY);
+        studentCreateDTO.setProfilePictureURL("https://doe.com");
+
+        studentRepository.save(studentMapper.toStudent(studentCreateDTO));
+
+        // get student
+        client.get()
+                .uri("/api/student/getStudentByEmail?email="
+                + studentCreateDTO.getEmail())
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(ApiResponse.class)
+                .value(response -> {
+                    StudentResponseDTO student = objectMapper.convertValue(
+                            response.data(), StudentResponseDTO.class
+                    );
+                    assertEquals("Jane", student.getName());
+                    assertEquals("Doe", student.getSurname());
+                    assertEquals(Department.BIOLOGY, student.getDepartment());
+                });
+
     }
 }
