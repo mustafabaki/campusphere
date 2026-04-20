@@ -2,7 +2,6 @@ package com.sudobuild.campusphere_backend.student_module.controllers;
 
 import com.sudobuild.campusphere_backend.auxiliary.ApiResponse;
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentCreateDTO;
-import com.sudobuild.campusphere_backend.student_module.models.Student;
 import com.sudobuild.campusphere_backend.student_module.services.StudentService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

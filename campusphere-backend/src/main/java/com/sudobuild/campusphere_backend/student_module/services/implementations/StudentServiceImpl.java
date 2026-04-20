@@ -3,6 +3,7 @@ package com.sudobuild.campusphere_backend.student_module.services.implementation
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentCreateDTO;
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentResponseDTO;
 import com.sudobuild.campusphere_backend.student_module.mappers.StudentMapper;
+import com.sudobuild.campusphere_backend.student_module.models.Student;
 import com.sudobuild.campusphere_backend.student_module.repositories.SocialLinkRepository;
 import com.sudobuild.campusphere_backend.student_module.repositories.StudentClubRepository;
 import com.sudobuild.campusphere_backend.student_module.repositories.StudentRepository;
@@ -30,5 +31,11 @@ public class StudentServiceImpl implements StudentService {
         var studentToSave = studentMapper.toStudent(student);
         var savedStudent = studentRepository.save(studentToSave);
         return studentMapper.toStudentResponseDTO(savedStudent);
+    }
+
+    @Override
+    public StudentResponseDTO getStudentByEmail(String email) {
+        Student student = studentRepository.findStudentByEmail(email);
+        return studentMapper.toStudentResponseDTO(student);
     }
 }
