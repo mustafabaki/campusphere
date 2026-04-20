@@ -8,6 +8,7 @@ class CampusphereBackendApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }
