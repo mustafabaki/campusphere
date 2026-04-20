@@ -38,4 +38,9 @@ public class StudentServiceImpl implements StudentService {
         Student student = studentRepository.findStudentByEmail(email);
         return studentMapper.toStudentResponseDTO(student);
     }
+
+    @Override
+    public void deleteStudent(String id) {
+        studentRepository.deleteById(id);
+    }
 }

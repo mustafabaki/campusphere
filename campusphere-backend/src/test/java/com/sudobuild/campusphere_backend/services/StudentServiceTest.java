@@ -12,8 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(properties = {
         "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=MySQL",
@@ -71,6 +70,25 @@ public class StudentServiceTest {
         assertNotNull(retrievedStudent);
         assertEquals("Jane Doe", retrievedStudent.getName());
         assertEquals("jane.doe@example.com", retrievedStudent.getEmail());
+    }
+
+    @Test
+    public void shouldDeleteStudentById() {
+        // Arrange
+        Student student = new Student();
+        student.setName("Mark Smith");
+        student.setEmail("mark.smith@example.com");
+        student.setPhone("1122334455");
+        student.setProfilePictureURL("https://example.com/mark_profile.jpg");
+        student.setDepartment(Department.ELECTRICAL_ENGINEERING);
+        Student savedStudent = studentRepository.save(student);
+
+        // Act
+        studentService.deleteStudent(savedStudent.getId());
+
+        // Assert
+        boolean exists = studentRepository.existsById(savedStudent.getId());
+        assertFalse(exists);
     }
 
 }
