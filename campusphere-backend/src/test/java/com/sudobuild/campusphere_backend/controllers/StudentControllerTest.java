@@ -63,6 +63,9 @@ public class StudentControllerTest {
                 .isOk()
                 .expectBody(ApiResponse.class)
                 .value(response -> {
+                    assertNotNull(response);
+                    assertNotNull(response.data());
+
                     StudentResponseDTO student = objectMapper.convertValue(
                             response.data(), StudentResponseDTO.class
                     );
@@ -86,12 +89,15 @@ public class StudentControllerTest {
         // get student
         client.get()
                 .uri("/api/student/getStudentByEmail?email="
-                + studentCreateDTO.getEmail())
+                        + studentCreateDTO.getEmail())
                 .exchange()
                 .expectStatus()
                 .isOk()
                 .expectBody(ApiResponse.class)
                 .value(response -> {
+                    assertNotNull(response);
+                    assertNotNull(response.data());
+
                     StudentResponseDTO student = objectMapper.convertValue(
                             response.data(), StudentResponseDTO.class
                     );
@@ -101,4 +107,31 @@ public class StudentControllerTest {
                 });
 
     }
+
+    @Test
+    void deleteStudentById() {
+        // create student
+        StudentCreateDTO studentCreateDTO = new StudentCreateDTO();
+        studentCreateDTO.setName("Mark");
+        studentCreateDTO.setSurname("Smith");
+        studentCreateDTO.setEmail("mark@smith.com");
+        studentCreateDTO.setDepartment(Department.CHEMISTRY);
+        studentCreateDTO.setProfilePictureURL("https://smith.com");
+
+        var savedStudent = studentRepository.save(studentMapper.toStudent(studentCreateDTO));
+
+        // delete student
+        client.delete()
+                .uri("/api/student/deleteStudentById?id=" + savedStudent.getId())
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(ApiResponse.class)
+                .value(response -> {
+                    assertNotNull(response);
+                    assertNull(response.data());
+                });
+    }
+
+
 }

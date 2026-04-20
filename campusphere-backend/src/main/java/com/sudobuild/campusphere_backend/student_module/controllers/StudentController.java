@@ -37,4 +37,14 @@ public class StudentController {
             return ResponseEntity.badRequest().body(response);
         }
     }
+
+    @DeleteMapping("deleteStudentById")
+    public ApiResponse<?> deleteStudentById(@RequestParam("id") String id) {
+        try {
+            studentService.deleteStudent(id);
+            return ApiResponse.success(null);
+        } catch (Exception e) {
+            return ApiResponse.failure(e.getMessage());
+        }
+    }
 }

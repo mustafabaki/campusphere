@@ -90,5 +90,4 @@ public class StudentServiceTest {
         boolean exists = studentRepository.existsById(savedStudent.getId());
         assertFalse(exists);
     }
-
 }
