@@ -133,5 +133,62 @@ public class StudentControllerTest {
                 });
     }
 
+    @Test
+    void updateStudentById() {
+        // create student
+        StudentCreateDTO studentCreateDTO = new StudentCreateDTO();
+        studentCreateDTO.setName("Alice");
+        studentCreateDTO.setSurname("Johnson");
+        studentCreateDTO.setEmail("alice@johnson.com");
+        studentCreateDTO.setDepartment(Department.PHYSICS);
+        studentCreateDTO.setProfilePictureURL("https://johnson.com");
 
+        var savedStudent = studentRepository.save(studentMapper.toStudent(studentCreateDTO));
+
+        // update student
+        StudentCreateDTO updateDTO = new StudentCreateDTO();
+        updateDTO.setName("Alice Updated");
+        updateDTO.setSurname("Johnson Updated");
+        updateDTO.setEmail("alice.updated@johnson.com");
+
+        client.put()
+                .uri("/api/student/updateStudentById?id=" + savedStudent.getId())
+                .body(updateDTO)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(ApiResponse.class)
+                .value(response -> {
+                    assertNotNull(response);
+                    assertNotNull(response.data());
+
+                    StudentResponseDTO updatedStudent = objectMapper.convertValue(
+                            response.data(), StudentResponseDTO.class
+                    );
+                    assertEquals("Alice Updated", updatedStudent.getName());
+                    assertEquals("Johnson Updated", updatedStudent.getSurname());
+                    assertEquals("alice.updated@johnson.com", updatedStudent.getEmail());
+                });
+    }
+
+    @Test
+    void updateStudentByIdNonExistent() {
+        // update non-existent student
+        StudentCreateDTO updateDTO = new StudentCreateDTO();
+        updateDTO.setName("Non Existent");
+
+        client.put()
+                .uri("/api/student/updateStudentById?id=non-existent-id")
+                .body(updateDTO)
+                .exchange()
+                .expectStatus()
+                .isBadRequest()
+                .expectBody(ApiResponse.class)
+                .value(response -> {
+                    assertNotNull(response);
+                    assertNull(response.data());
+                    assertEquals("Student not found with id: non-existent-id", response.message());
+                });
+    }
 }
+

@@ -43,4 +43,35 @@ public class StudentServiceImpl implements StudentService {
     public void deleteStudent(String id) {
         studentRepository.deleteById(id);
     }
+
+    @Override
+    public StudentResponseDTO updateStudent(String id, StudentCreateDTO student) {
+        // fetch the existing student
+        Student existingStudent = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
+
+        // update the fields of the existing student with the new values from the DTO (only if they are not null)
+        if (student.getName() != null) {
+            existingStudent.setName(student.getName());
+        }
+        if(student.getSurname() != null) {
+            existingStudent.setSurname(student.getSurname());
+        }
+        if (student.getEmail() != null) {
+            existingStudent.setEmail(student.getEmail());
+        }
+        if (student.getPhone() != null) {
+            existingStudent.setPhone(student.getPhone());
+        }
+        if (student.getProfilePictureURL() != null) {
+            existingStudent.setProfilePictureURL(student.getProfilePictureURL());
+        }
+        if (student.getDepartment() != null) {
+            existingStudent.setDepartment(student.getDepartment());
+        }
+
+        // save the updated student
+        Student updatedStudent = studentRepository.save(existingStudent);
+        return studentMapper.toStudentResponseDTO(updatedStudent);
+
+    }
 }

@@ -90,4 +90,46 @@ public class StudentServiceTest {
         boolean exists = studentRepository.existsById(savedStudent.getId());
         assertFalse(exists);
     }
+
+    @Test
+    public void shouldUpdateStudentFields() {
+        // Arrange
+        Student student = new Student();
+        student.setName("Alice Johnson");
+        student.setEmail("alice.johnson@example.com");
+        student.setPhone("1231231234");
+        student.setProfilePictureURL("https://example.com/alice_profile.jpg");
+        student.setDepartment(Department.CIVIL_ENGINEERING);
+        Student savedStudent = studentRepository.save(student);
+
+        StudentCreateDTO updateDTO = new StudentCreateDTO();
+        updateDTO.setName("Alice Updated");
+        updateDTO.setEmail("alice.updated@example.com");
+        updateDTO.setPhone("9879879876");
+
+        // Act
+        StudentResponseDTO updatedStudent = studentService.updateStudent(savedStudent.getId(), updateDTO);
+
+        // Assert
+        assertNotNull(updatedStudent);
+        assertEquals("Alice Updated", updatedStudent.getName());
+        assertEquals("alice.updated@example.com", updatedStudent.getEmail());
+        assertEquals("9879879876", updatedStudent.getPhone());
+        assertEquals("https://example.com/alice_profile.jpg", updatedStudent.getProfilePictureURL());
+        assertEquals(Department.CIVIL_ENGINEERING, updatedStudent.getDepartment());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenUpdatingNonExistentStudent() {
+        // Arrange
+        String nonExistentId = "non-existent-id";
+        StudentCreateDTO updateDTO = new StudentCreateDTO();
+        updateDTO.setName("Non Existent");
+
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            studentService.updateStudent(nonExistentId, updateDTO);
+        });
+        assertEquals("Student not found with id: non-existent-id", exception.getMessage());
+    }
 }

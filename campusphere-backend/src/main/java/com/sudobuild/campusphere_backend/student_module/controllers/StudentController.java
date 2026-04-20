@@ -47,4 +47,14 @@ public class StudentController {
             return ApiResponse.failure(e.getMessage());
         }
     }
+
+    @PutMapping("updateStudentById")
+    public ResponseEntity<ApiResponse> updateStudentById(@RequestParam("id") String id, @RequestBody StudentCreateDTO student) {
+        try {
+            var updatedStudent = studentService.updateStudent(id, student);
+            return ResponseEntity.ok(ApiResponse.success(updatedStudent));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
+        }
+    }
 }
