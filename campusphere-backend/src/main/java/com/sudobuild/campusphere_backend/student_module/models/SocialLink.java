@@ -1,5 +1,6 @@
 package com.sudobuild.campusphere_backend.student_module.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sudobuild.campusphere_backend.student_module.enums.SocialMediaPlatform;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class SocialLink {
     private String id;
     @ManyToOne
     @JoinColumn(name = "student_id")
+    @JsonIgnoreProperties({"enrolledClubs", "socialLinks"})
     private Student student;
     private String url;
     @Enumerated(EnumType.STRING)

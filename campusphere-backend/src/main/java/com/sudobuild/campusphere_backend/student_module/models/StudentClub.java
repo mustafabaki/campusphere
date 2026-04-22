@@ -1,5 +1,6 @@
 package com.sudobuild.campusphere_backend.student_module.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,6 +18,7 @@ public class StudentClub {
     private String logoURL;
     @ManyToOne
     @JoinColumn(name = "student_id")
+    @JsonIgnoreProperties({"enrolledClubs", "socialLinks"})
     private Student leader;
 
 
