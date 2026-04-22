@@ -2,7 +2,9 @@ package com.sudobuild.campusphere_backend.student_module.services.implementation
 
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentCreateDTO;
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentResponseDTO;
+import com.sudobuild.campusphere_backend.student_module.enums.SocialMediaPlatform;
 import com.sudobuild.campusphere_backend.student_module.mappers.StudentMapper;
+import com.sudobuild.campusphere_backend.student_module.models.SocialLink;
 import com.sudobuild.campusphere_backend.student_module.models.Student;
 import com.sudobuild.campusphere_backend.student_module.repositories.SocialLinkRepository;
 import com.sudobuild.campusphere_backend.student_module.repositories.StudentClubRepository;
@@ -53,7 +55,7 @@ public class StudentServiceImpl implements StudentService {
         if (student.getName() != null) {
             existingStudent.setName(student.getName());
         }
-        if(student.getSurname() != null) {
+        if (student.getSurname() != null) {
             existingStudent.setSurname(student.getSurname());
         }
         if (student.getEmail() != null) {
@@ -73,5 +75,23 @@ public class StudentServiceImpl implements StudentService {
         Student updatedStudent = studentRepository.save(existingStudent);
         return studentMapper.toStudentResponseDTO(updatedStudent);
 
+    }
+
+    @Override
+    public StudentResponseDTO addSocialLinkToStudent(String studentId, String url, SocialMediaPlatform platform) {
+        // find the student
+        Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
+
+        // create the social link
+        SocialLink socialLink = new SocialLink();
+        socialLink.setUrl(url);
+        socialLink.setPlatform(platform);
+        socialLink.setStudent(student);
+
+        // save the social link
+        socialLinkRepository.save(socialLink);
+
+        // return the updated student
+        return studentMapper.toStudentResponseDTO(student);
     }
 }

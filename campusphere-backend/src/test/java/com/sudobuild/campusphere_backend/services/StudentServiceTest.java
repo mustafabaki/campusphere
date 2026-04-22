@@ -6,8 +6,12 @@ import com.sudobuild.campusphere_backend.student_module.enums.Department;
 import com.sudobuild.campusphere_backend.student_module.mappers.StudentMapper;
 import com.sudobuild.campusphere_backend.student_module.models.Student;
 import com.sudobuild.campusphere_backend.student_module.repositories.StudentRepository;
+import com.sudobuild.campusphere_backend.student_module.enums.SocialMediaPlatform;
+import com.sudobuild.campusphere_backend.student_module.models.SocialLink;
+import com.sudobuild.campusphere_backend.student_module.repositories.SocialLinkRepository;
 import com.sudobuild.campusphere_backend.student_module.services.StudentService;
 import org.junit.jupiter.api.Test;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +35,8 @@ public class StudentServiceTest {
     @Autowired
     private StudentRepository studentRepository;
 
+    @Autowired
+    private SocialLinkRepository socialLinkRepository;
 
     @Test
     public void shouldSaveStudent() {
@@ -129,6 +135,49 @@ public class StudentServiceTest {
         // Act & Assert
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             studentService.updateStudent(nonExistentId, updateDTO);
+        });
+        assertEquals("Student not found with id: non-existent-id", exception.getMessage());
+    }
+
+    @Test
+    public void shouldAddSocialLinkToStudent() {
+        // Arrange
+        Student student = new Student();
+        student.setName("Tom");
+        student.setSurname("Cruise");
+        student.setEmail("tom.cruise@example.com");
+        student.setPhone("5554443333");
+        student.setProfilePictureURL("https://example.com/tom_profile.jpg");
+        student.setDepartment(Department.COMPUTER_ENGINEERING);
+        Student savedStudent = studentRepository.save(student);
+
+        String url = "https://linkedin.com/in/tomcruise";
+        SocialMediaPlatform platform = SocialMediaPlatform.LINKEDIN;
+
+        // Act
+        StudentResponseDTO responseDTO = studentService.addSocialLinkToStudent(savedStudent.getId(), url, platform);
+
+        // Assert
+        assertNotNull(responseDTO);
+        assertEquals(savedStudent.getId(), responseDTO.getId());
+
+        List<SocialLink> links = socialLinkRepository.findAll();
+        assertFalse(links.isEmpty());
+        assertEquals(url, links.get(links.size() - 1).getUrl());
+        assertEquals(platform, links.get(links.size() - 1).getPlatform());
+        assertEquals(savedStudent.getId(), links.get(links.size() - 1).getStudent().getId());
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenAddingSocialLinkToNonExistentStudent() {
+        // Arrange
+        String nonExistentId = "non-existent-id";
+        String url = "https://linkedin.com/in/nobody";
+        SocialMediaPlatform platform = SocialMediaPlatform.LINKEDIN;
+
+        // Act & Assert
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            studentService.addSocialLinkToStudent(nonExistentId, url, platform);
         });
         assertEquals("Student not found with id: non-existent-id", exception.getMessage());
     }
