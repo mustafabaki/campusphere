@@ -1,10 +1,10 @@
 package com.sudobuild.campusphere_backend.controllers;
 
-
 import com.sudobuild.campusphere_backend.auxiliary.ApiResponse;
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentCreateDTO;
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentResponseDTO;
 import com.sudobuild.campusphere_backend.student_module.enums.Department;
+import com.sudobuild.campusphere_backend.student_module.enums.SocialMediaPlatform;
 import com.sudobuild.campusphere_backend.student_module.mappers.StudentMapper;
 import com.sudobuild.campusphere_backend.student_module.repositories.StudentRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,8 +67,7 @@ public class StudentControllerTest {
                     assertNotNull(response.data());
 
                     StudentResponseDTO student = objectMapper.convertValue(
-                            response.data(), StudentResponseDTO.class
-                    );
+                            response.data(), StudentResponseDTO.class);
                     assertEquals("Jane", student.getName());
                     assertEquals("Doe", student.getSurname());
                 });
@@ -99,8 +98,7 @@ public class StudentControllerTest {
                     assertNotNull(response.data());
 
                     StudentResponseDTO student = objectMapper.convertValue(
-                            response.data(), StudentResponseDTO.class
-                    );
+                            response.data(), StudentResponseDTO.class);
                     assertEquals("Jane", student.getName());
                     assertEquals("Doe", student.getSurname());
                     assertEquals(Department.BIOLOGY, student.getDepartment());
@@ -163,8 +161,7 @@ public class StudentControllerTest {
                     assertNotNull(response.data());
 
                     StudentResponseDTO updatedStudent = objectMapper.convertValue(
-                            response.data(), StudentResponseDTO.class
-                    );
+                            response.data(), StudentResponseDTO.class);
                     assertEquals("Alice Updated", updatedStudent.getName());
                     assertEquals("Johnson Updated", updatedStudent.getSurname());
                     assertEquals("alice.updated@johnson.com", updatedStudent.getEmail());
@@ -190,5 +187,40 @@ public class StudentControllerTest {
                     assertEquals("Student not found with id: non-existent-id", response.message());
                 });
     }
-}
 
+    @Test
+    void addSocialLinkToStudent() {
+        // create student
+        StudentCreateDTO studentCreateDTO = new StudentCreateDTO();
+        studentCreateDTO.setName("Bob");
+        studentCreateDTO.setSurname("Builder");
+        studentCreateDTO.setEmail("bob@builder.com");
+        studentCreateDTO.setDepartment(Department.PHYSICS);
+        studentCreateDTO.setProfilePictureURL("https://bob.com");
+
+        var savedStudent = studentRepository.save(studentMapper.toStudent(studentCreateDTO));
+
+        client.post()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/api/student/addSocialLinkToStudent")
+                        .queryParam("studentId", savedStudent.getId())
+                        .queryParam("url", "https://github.com/bob")
+                        .queryParam("platform", SocialMediaPlatform.GITHUB.toString())
+                        .build())
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(ApiResponse.class)
+                .value(response -> {
+                    System.out.println(response);
+                    assertNotNull(response);
+                    assertNotNull(response.data());
+
+                    StudentResponseDTO updatedStudent = objectMapper.convertValue(
+                            response.data(), StudentResponseDTO.class);
+                    assertEquals(1, updatedStudent.getSocialLinks().size());
+                    assertEquals("https://github.com/bob", updatedStudent.getSocialLinks().get(0).getUrl());
+                    assertEquals(SocialMediaPlatform.GITHUB, updatedStudent.getSocialLinks().get(0).getPlatform());
+                });
+    }
+}

@@ -91,6 +91,9 @@ public class StudentServiceImpl implements StudentService {
         // save the social link
         socialLinkRepository.save(socialLink);
 
+        // maintain bidirectional relationship
+        student.getSocialLinks().add(socialLink);
+
         // return the updated student
         return studentMapper.toStudentResponseDTO(student);
     }

@@ -3,6 +3,7 @@ package com.sudobuild.campusphere_backend.student_module.controllers;
 import com.sudobuild.campusphere_backend.auxiliary.ApiResponse;
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentCreateDTO;
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentResponseDTO;
+import com.sudobuild.campusphere_backend.student_module.enums.SocialMediaPlatform;
 import com.sudobuild.campusphere_backend.student_module.services.StudentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,9 +50,21 @@ public class StudentController {
     }
 
     @PutMapping("updateStudentById")
-    public ResponseEntity<ApiResponse> updateStudentById(@RequestParam("id") String id, @RequestBody StudentCreateDTO student) {
+    public ResponseEntity<ApiResponse> updateStudentById(@RequestParam("id") String id,
+            @RequestBody StudentCreateDTO student) {
         try {
             var updatedStudent = studentService.updateStudent(id, student);
+            return ResponseEntity.ok(ApiResponse.success(updatedStudent));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
+        }
+    }
+
+    @PostMapping("addSocialLinkToStudent")
+    public ResponseEntity<?> addSocialLinkToStudent(@RequestParam String studentId, @RequestParam String url,
+            @RequestParam SocialMediaPlatform platform) {
+        try {
+            var updatedStudent = studentService.addSocialLinkToStudent(studentId, url, platform);
             return ResponseEntity.ok(ApiResponse.success(updatedStudent));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));

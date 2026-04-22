@@ -1,9 +1,9 @@
 package com.sudobuild.campusphere_backend.student_module.DTOs;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sudobuild.campusphere_backend.student_module.enums.Department;
 import com.sudobuild.campusphere_backend.student_module.models.SocialLink;
 import com.sudobuild.campusphere_backend.student_module.models.StudentClub;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +20,8 @@ public class StudentResponseDTO {
     private String phone;
     private String profilePictureURL;
     private Department department;
+    @JsonIgnoreProperties("leader")
     private List<StudentClub> enrolledClubs = new ArrayList<>();
+    @JsonIgnoreProperties("student")
     private List<SocialLink> socialLinks = new ArrayList<>();
 }
