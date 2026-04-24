@@ -16,7 +16,7 @@ import jakarta.persistence.*;
  */
 @Entity
 @Table(name = "users")
-public class User {
+public class CampusphereUser {
 
     /** Unique identifier, auto-generated as a UUID. */
     @Id

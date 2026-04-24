@@ -29,16 +29,9 @@ public class SecurityConfig {
         return http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        /*
-                         * .requestMatchers("/api/login").permitAll()
-                         * .requestMatchers("/api/saveUser").permitAll()
-                         * .requestMatchers("/api/verify-email").permitAll()
-                         * .requestMatchers("/api/reset-password").permitAll()
-                         * .requestMatchers("/change-password").permitAll()
-                         * .requestMatchers("/reset-password").permitAll()
-                         * .requestMatchers("/ping").permitAll()
-                         */
-                        .anyRequest().permitAll())
+                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/register").permitAll()
+                        .anyRequest().authenticated())
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .build();
