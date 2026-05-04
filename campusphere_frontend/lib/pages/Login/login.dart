@@ -1,3 +1,4 @@
+import 'package:campusphere_frontend/pages/Login/functions.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -10,6 +11,8 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final Color _primaryColor = const Color(0xFF04326B);
   final Color _textColor = const Color(0xFF101828);
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 8),
                   TextField(
+                    controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       hintText: "student.name@university.edu",
@@ -132,13 +136,11 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 8),
                   TextField(
+                    controller: _passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
-                      hintText: "••••••••",
-                      hintStyle: TextStyle(
-                        color: Colors.grey.shade500,
-                        letterSpacing: 2,
-                      ),
+                      hintText: "Enter your password",
+                      hintStyle: TextStyle(color: Colors.grey.shade500),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -163,7 +165,13 @@ class _LoginPageState extends State<LoginPage> {
                     width: double.infinity,
                     height: 52,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        LoginFunctions.login(
+                          context,
+                          _emailController.text,
+                          _passwordController.text,
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _primaryColor,
                         shape: RoundedRectangleBorder(

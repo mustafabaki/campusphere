@@ -50,7 +50,7 @@ public class AuthController {
      * @return A ResponseEntity containing the JWT token on success, or an error
      *         message on failure.
      */
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginDTO loginCredentials) {
         try {
             authenticationManager.authenticate(

@@ -1,4 +1,4 @@
-import 'package:campusphere_frontend/pages/login.dart';
+import 'package:campusphere_frontend/pages/Login/login.dart';
 import 'package:flutter/material.dart';
 
 void main() {
