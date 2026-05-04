@@ -12,3 +12,8 @@ spring:
     hibernate:
       ddl-auto: update
 
+security:
+  jwt:
+    secret-key: ${JWT_SECRET}
+    issuer: ${JWT_ISSUER}
+
