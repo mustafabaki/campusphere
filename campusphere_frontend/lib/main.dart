@@ -1,3 +1,4 @@
+import 'package:campusphere_frontend/auxiliary/app_theme.dart';
 import 'package:campusphere_frontend/pages/Login/login.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'CampuSphere',
-      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+      theme: AppTheme.lightTheme,
       home: const LoginPage(),
     );
   }

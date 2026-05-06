@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../auxiliary/constants.dart';
+import '../main_shell.dart';
 
 class LoginFunctions {
   static Future<void> login(
@@ -19,11 +20,11 @@ class LoginFunctions {
 
     if (response.statusCode == 200) {
       
-      // Navigate to home page
-      /* Navigator.pushReplacement(
+      // Navigate to the main application shell
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
-      );*/
+        MaterialPageRoute(builder: (context) => const MainShell()),
+      );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Invalid email or password")),
