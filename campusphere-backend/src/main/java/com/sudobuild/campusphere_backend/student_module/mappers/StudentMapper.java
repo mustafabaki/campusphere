@@ -27,7 +27,6 @@ public class StudentMapper {
         studentResponseDTO.setEmail(student.getEmail());
         studentResponseDTO.setPhone(student.getPhone());
         studentResponseDTO.setProfilePictureURL(student.getProfilePictureURL());
-        studentResponseDTO.setEnrolledClubs(student.getEnrolledClubs());
         studentResponseDTO.setSocialLinks(student.getSocialLinks());
         studentResponseDTO.setDepartment(student.getDepartment());
         return studentResponseDTO;

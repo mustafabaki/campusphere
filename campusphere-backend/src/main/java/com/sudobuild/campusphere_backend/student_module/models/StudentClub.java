@@ -17,8 +17,7 @@ public class StudentClub {
     private String name;
     private String logoURL;
     @ManyToOne
-    @JoinColumn(name = "student_id")
-    @JsonIgnoreProperties({"enrolledClubs", "socialLinks"})
+    @JoinColumn(name = "leader_id")
     private Student leader;
 
 

@@ -20,8 +20,6 @@ public class StudentResponseDTO {
     private String phone;
     private String profilePictureURL;
     private Department department;
-    @JsonIgnoreProperties("leader")
-    private List<StudentClub> enrolledClubs = new ArrayList<>();
     @JsonIgnoreProperties("student")
     private List<SocialLink> socialLinks = new ArrayList<>();
 }
