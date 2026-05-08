@@ -7,43 +7,28 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: const _HomeBody(),
-    );
+    return Scaffold(appBar: _buildAppBar(), body: const _HomeBody());
   }
 
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const CircleAvatar(
-            radius: 16,
-            backgroundImage: NetworkImage(
-              'https://lh3.googleusercontent.com/aida-public/AB6AXuBumIhOjoEeYMRQyIInaZKjg7F58LCMGBCAb0-akovlUqfGb4Xkv2QIZ8vyNHLYIUgaK_7xmV7JtH6LXZu392xGWeA7XzmqpDKGrEtwPfDOnAKdQQSXuFPtBJ3yHlQarbL1uWL6P3tOoVPJBMppVnIsAjFbyLDksP-PPJfI0Rl-Q7Et6TUGQuSRSpayEV_pWDl1EdTgonIhMXYRelBikaZjSwH-i9ZqRjQJyeYBSouxCUwSRxvFduygZhdRTDPHcUePYOCooP7B9Ic',
-            ),
+      leading: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: const CircleAvatar(
+          backgroundImage: NetworkImage(
+            'https://www.simplelyst.com/_image-uploads/profile_photo-agents-agent-2-87173.jpg',
           ),
-          const SizedBox(width: 10),
-          Text(
-            'CampuSphere',
-            style: GoogleFonts.lexend(
-              fontSize: 20,
-              fontWeight: FontWeight.w800,
-              color: AppColors.universityBlue,
-              letterSpacing: -0.5,
-            ),
-          ),
-        ],
-      ),
-      centerTitle: false,
-      actions: [
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.search, color: AppColors.universityBlue),
-          splashRadius: 20,
         ),
-      ],
+      ),
+      title: Text(
+        'CampuSphere',
+        style: GoogleFonts.lexend(
+          fontSize: 20,
+          fontWeight: FontWeight.w800,
+          color: AppColors.universityBlue,
+          letterSpacing: -0.5,
+        ),
+      ),
     );
   }
 }
@@ -181,9 +166,8 @@ class _HomeBody extends StatelessWidget {
             Image.network(
               'https://lh3.googleusercontent.com/aida-public/AB6AXuBdZKmsptbSIUBDfAdCa8wMYNu6U0r40N4SZvebBHAvZP1E44QXYqVHFkryB0CkuxgrP_dvT-wDuCZUdsWCo03xcFJKzD4gNIalSIewClCSIFtOY4geEkvVgbyY4LBDLSURVL54cBkK60vgnqJfp5oBZKet-hes1b4vI97R1XYxrclg5gWUQBjTwD6Qt1itAiMNqxZyJDtVVNDMTVF2eiNhhrFEPqUeH8mxiVy6lqD6uqKymt0qS7DhJdrokv6RBzQ8VXawckZcFnY',
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Container(
-                color: AppColors.primaryContainer,
-              ),
+              errorBuilder: (context, error, stackTrace) =>
+                  Container(color: AppColors.primaryContainer),
             ),
             // Gradient overlay
             Container(
@@ -263,7 +247,11 @@ class _HomeBody extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 4),
-                        const Icon(Icons.arrow_forward, size: 18, color: AppColors.primary),
+                        const Icon(
+                          Icons.arrow_forward,
+                          size: 18,
+                          color: AppColors.primary,
+                        ),
                       ],
                     ),
                     style: FilledButton.styleFrom(
@@ -271,7 +259,10 @@ class _HomeBody extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                     ),
                   ),
                 ],
@@ -322,7 +313,8 @@ class _HomeBody extends StatelessWidget {
                 'https://lh3.googleusercontent.com/aida-public/AB6AXuCi2kFc5c8hlWrXzfkbsC_0eHCcK8sm3JaQyiaWq5MpPsKGCi6wMOVce4_jqY62AHr1lpWqIQXkvO3WdH1x05_UnCaIPzE4CpJ0B7pSF00-OxoDMzK8dKer3SBOxyzS7UPKwwGzF5KX4fjgJ2sJPp1MWo6KI4O3jJS7r0mQIVBsMpz2bBoF1XYLY-jvzQ2U0cNV4aAtQcZdDKdVSi0fRxzbbc789h3g6ZU9IY3KHEhu99nmKTDuMSrJoW_V4QlcqChr2Q2wbxbGRJM',
             category: 'Tech',
             title: 'Campus Hackathon Prep Kickoff',
-            description: 'Get your teams ready and pitch your initial ideas. Pizza provided!',
+            description:
+                'Get your teams ready and pitch your initial ideas. Pizza provided!',
             metaIcon: Icons.location_on_outlined,
             metaText: 'Innovation Lab',
           ),
@@ -334,7 +326,8 @@ class _HomeBody extends StatelessWidget {
                 'https://lh3.googleusercontent.com/aida-public/AB6AXuCE0mCIO3Sj_fKytvx9QwT0bvu_Iev-HrjbIfAdo3w0dV17-eOIuTe3UHrPvRhICX-dxPHF3gwM6cmZ_aifmuuK9dwVe5-NNfsM1vyoYY1j2yZ233na1s0eDXnq0fOCtljA3hnoPmKQtVhvFLfryfj1Dvo3UBYjCsI1Zu6OjiVnJLJw7Blk-tjTp9ZtvLcuVDN5RbaMhP8u-U6wcYzt1J5EgX2yA0UlYHXcDlzJb1oagFSD6mQqIvF52fn0z57a5GOhy6Mw8wO6QdE',
             category: 'Sports',
             title: 'Intramural Volleyball Signups',
-            description: 'Registration closes this Friday. Find a team or register as a free agent.',
+            description:
+                'Registration closes this Friday. Find a team or register as a free agent.',
             metaIcon: Icons.calendar_today_outlined,
             metaText: 'Tomorrow',
           ),
@@ -443,7 +436,11 @@ class _HomeBody extends StatelessWidget {
                   color: AppColors.onSurfaceVariant,
                 ),
               ),
-              const Icon(Icons.push_pin_outlined, size: 20, color: AppColors.outlineVariant),
+              const Icon(
+                Icons.push_pin_outlined,
+                size: 20,
+                color: AppColors.outlineVariant,
+              ),
             ],
           ),
           const SizedBox(height: 16),
@@ -545,16 +542,24 @@ class _FeedCard extends StatelessWidget {
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) => Container(
                       color: AppColors.surfaceContainer,
-                      child: const Icon(Icons.image_outlined, color: AppColors.outlineVariant),
+                      child: const Icon(
+                        Icons.image_outlined,
+                        color: AppColors.outlineVariant,
+                      ),
                     ),
                   ),
                   Positioned(
                     top: 8,
                     left: 8,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
-                        color: AppColors.surfaceContainerLowest.withValues(alpha: 0.9),
+                        color: AppColors.surfaceContainerLowest.withValues(
+                          alpha: 0.9,
+                        ),
                         borderRadius: BorderRadius.circular(100),
                       ),
                       child: Text(
