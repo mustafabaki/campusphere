@@ -16,9 +16,4 @@ public class StudentClub {
     private String id;
     private String name;
     private String logoURL;
-    @ManyToOne
-    @JoinColumn(name = "leader_id")
-    private Student leader;
-
-
 }

@@ -25,7 +25,4 @@ public class Student {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "student")
     private List<SocialLink> socialLinks = new ArrayList<>();
 
-
-
-
 }

@@ -31,18 +31,7 @@ public class StudentClubServiceImpl implements StudentClubService {
             StudentClub existingClub = studentClubRepository.findById(id).orElseThrow(() -> new RuntimeException("Club not found with id: " + id));
 
             // Update fields if not null
-           if(studentClub.getName() != null)
-           {
-            existingClub.setName(studentClub.getName());
-           }
-           if(studentClub.getLogoURL() != null)
-           {
-            existingClub.setLogoURL(studentClub.getLogoURL());
-           }
-           if(studentClub.getLeader() != null)
-           {
-            existingClub.setLeader(studentClub.getLeader());
-           }
+          
 
 
             return studentClubRepository.save(existingClub);
