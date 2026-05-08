@@ -28,14 +28,22 @@ public class StudentClubServiceImpl implements StudentClubService {
     @Override
     public StudentClub update(String id, StudentClub studentClub) {
         try {
-            StudentClub existingClub = studentClubRepository.findById(id).orElseThrow(() -> new RuntimeException("Club not found with id: " + id));
+            StudentClub existingClub = studentClubRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Club not found with id: " + id));
 
             // Update fields if not null
-          
-
+            if(studentClub.getName() != null) {
+                existingClub.setName(studentClub.getName());
+            }
+            if(studentClub.getDescription() != null) {
+                existingClub.setDescription(studentClub.getDescription());
+            }
+            if(studentClub.getLogoURL() != null) {
+                existingClub.setLogoURL(studentClub.getLogoURL());
+            }
 
             return studentClubRepository.save(existingClub);
-            
+
         } catch (Exception e) {
             throw new RuntimeException("Club cannot be updated.");
         }
@@ -44,7 +52,8 @@ public class StudentClubServiceImpl implements StudentClubService {
     @Override
     public void delete(String id) {
         try {
-            StudentClub existingClub = studentClubRepository.findById(id).orElseThrow(() -> new RuntimeException("Club not found with id: " + id));
+            StudentClub existingClub = studentClubRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Club not found with id: " + id));
             studentClubRepository.delete(existingClub);
         } catch (Exception e) {
             throw new RuntimeException("Club cannot be deleted.");
@@ -54,7 +63,8 @@ public class StudentClubServiceImpl implements StudentClubService {
     @Override
     public StudentClub getById(String id) {
         try {
-            return studentClubRepository.findById(id).orElseThrow(() -> new RuntimeException("Club not found with id: " + id));
+            return studentClubRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Club not found with id: " + id));
         } catch (Exception e) {
             throw new RuntimeException("Club cannot be found.");
         }

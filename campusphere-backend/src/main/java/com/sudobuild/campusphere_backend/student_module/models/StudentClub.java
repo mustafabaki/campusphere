@@ -15,5 +15,6 @@ public class StudentClub {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String name;
+    private String description;
     private String logoURL;
 }
