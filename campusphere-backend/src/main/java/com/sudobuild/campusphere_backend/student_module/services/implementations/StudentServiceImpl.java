@@ -7,7 +7,6 @@ import com.sudobuild.campusphere_backend.student_module.mappers.StudentMapper;
 import com.sudobuild.campusphere_backend.student_module.models.SocialLink;
 import com.sudobuild.campusphere_backend.student_module.models.Student;
 import com.sudobuild.campusphere_backend.student_module.repositories.SocialLinkRepository;
-import com.sudobuild.campusphere_backend.student_module.repositories.StudentClubRepository;
 import com.sudobuild.campusphere_backend.student_module.repositories.StudentRepository;
 import com.sudobuild.campusphere_backend.student_module.services.StudentService;
 import org.springframework.stereotype.Service;
@@ -15,14 +14,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
-    private final StudentClubRepository studentClubRepository;
     private final SocialLinkRepository socialLinkRepository;
     private final StudentMapper studentMapper;
 
 
-    public StudentServiceImpl(StudentRepository studentRepository, StudentClubRepository studentClubRepository, SocialLinkRepository socialLinkRepository, StudentMapper studentMapper) {
+    public StudentServiceImpl(StudentRepository studentRepository,  SocialLinkRepository socialLinkRepository, StudentMapper studentMapper) {
         this.studentRepository = studentRepository;
-        this.studentClubRepository = studentClubRepository;
         this.socialLinkRepository = socialLinkRepository;
         this.studentMapper = studentMapper;
     }
