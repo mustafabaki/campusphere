@@ -42,7 +42,7 @@ public class StudentClubServiceTest {
         studentClub.setLogoURL("https://example.com/chess_club.jpg");
 
         // Act
-        StudentClub createdClub = studentClubService.create(studentClub);
+        StudentClub createdClub = studentClubService.createClub(studentClub);
 
         // Assert
         assertNotNull(createdClub);
@@ -65,7 +65,7 @@ public class StudentClubServiceTest {
         savedClub.setName("Chess Club Updated");
 
         // Act
-        StudentClub updatedClub = studentClubService.update(savedClub.getId(), savedClub);
+        StudentClub updatedClub = studentClubService.updateClub(savedClub.getId(), savedClub);
 
         // Assert
         assertNotNull(updatedClub);
@@ -87,7 +87,7 @@ public class StudentClubServiceTest {
         StudentClub savedClub = studentClubRepository.save(studentClub);
 
         // Act
-        studentClubService.delete(savedClub.getId());
+        studentClubService.deleteClub(savedClub.getId());
 
         // Assert
         StudentClub deletedClub = studentClubRepository.findById(savedClub.getId())
@@ -106,7 +106,7 @@ public class StudentClubServiceTest {
         studentClubRepository.save(studentClub);
 
         // Act
-        List<StudentClub> allClubs = studentClubService.getAll();
+        List<StudentClub> allClubs = studentClubService.getAllClubs();
 
         // Assert
         assertNotNull(allClubs);
