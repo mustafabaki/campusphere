@@ -1,6 +1,7 @@
 package com.sudobuild.campusphere_backend.student_module.services.implementations;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.sudobuild.campusphere_backend.student_module.enums.ClubRole;
 import com.sudobuild.campusphere_backend.student_module.models.Student;
@@ -134,11 +135,12 @@ public class StudentClubServiceImpl implements StudentClubService {
     }
 
     @Override
-    public List<StudentClubMember> getMembersByStudentId(String studentId) {
+    public List<StudentClub> getClubMembershipsByStudentId(String studentId) {
         try {
-            return studentClubMemberRepository.findAllByStudentId(studentId);
+            List<StudentClubMember> members = studentClubMemberRepository.findAllByStudentId(studentId);
+            return members.stream().map(StudentClubMember::getClub).collect(Collectors.toList());
         } catch (Exception e) {
-            throw new RuntimeException("Members could not be retrieved for student: " + studentId);
+            throw new RuntimeException("Memberships could not be retrieved for student: " + studentId);
         }
     }
 

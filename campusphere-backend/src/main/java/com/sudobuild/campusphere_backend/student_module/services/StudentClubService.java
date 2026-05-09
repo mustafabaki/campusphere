@@ -91,5 +91,5 @@ public interface StudentClubService {
      * @param studentId the ID of the student
      * @return a list of membership records for the student
      */
-    List<StudentClubMember> getMembersByStudentId(String studentId);
+    List<StudentClub> getClubMembershipsByStudentId(String studentId);
 }
