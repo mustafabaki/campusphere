@@ -18,6 +18,5 @@ public class StudentCreateDTO {
     private String phone;
     private String profilePictureURL;
     private Department department;
-    private List<StudentClub> enrolledClubs = new ArrayList<>();
     private List<SocialLink> socialLinks = new ArrayList<>();
 }

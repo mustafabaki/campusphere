@@ -87,6 +87,7 @@ public class AuthController {
             newUser.setEmail(registerCredentials.getEmail());
             newUser.setPassword(registerCredentials.getPassword());
             newUser.setRole(registerCredentials.getRole());
+            newUser.setMobileDeviceToken(registerCredentials.getMobileDeviceToken());
             userRepository.save(newUser);
 
             return ResponseEntity.ok(ApiResponse.success("User registered successfully"));
