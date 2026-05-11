@@ -4,6 +4,7 @@ import com.sudobuild.campusphere_backend.auxiliary.ApiResponse;
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentCreateDTO;
 import com.sudobuild.campusphere_backend.student_module.DTOs.StudentResponseDTO;
 import com.sudobuild.campusphere_backend.student_module.enums.SocialMediaPlatform;
+import com.sudobuild.campusphere_backend.student_module.services.StudentClubService;
 import com.sudobuild.campusphere_backend.student_module.services.StudentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/student")
 public class StudentController {
     private final StudentService studentService;
+    private final StudentClubService studentClubService;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, StudentClubService studentClubService) {
         this.studentService = studentService;
+        this.studentClubService = studentClubService;
     }
 
     @PostMapping("/create")
@@ -66,6 +69,16 @@ public class StudentController {
         try {
             var updatedStudent = studentService.addSocialLinkToStudent(studentId, url, platform);
             return ResponseEntity.ok(ApiResponse.success(updatedStudent));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
+        }
+    }
+
+    @GetMapping("/{studentId}/clubs")
+    public ResponseEntity<?> getClubsByStudentId(@PathVariable String studentId){
+        try {
+            var clubs = studentClubService.getClubMembershipsByStudentId(studentId);
+            return ResponseEntity.ok(ApiResponse.success(clubs));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
         }
