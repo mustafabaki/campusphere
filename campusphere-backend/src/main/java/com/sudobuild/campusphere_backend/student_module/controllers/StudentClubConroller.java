@@ -1,6 +1,7 @@
 package com.sudobuild.campusphere_backend.student_module.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ public class StudentClubConroller {
     // -------- Club Management Endpoints ---------
 
     @PostMapping()
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> createClub(@RequestBody StudentClub studentClub) {
 
         try {
@@ -40,6 +42,7 @@ public class StudentClubConroller {
     }
 
     @GetMapping()
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> getAllClubs() {
         try {
             var clubs = studentClubService.getAllClubs();
@@ -50,6 +53,7 @@ public class StudentClubConroller {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> getClubById(@PathVariable String id) {
         try {
             var club = studentClubService.getClubById(id);
@@ -60,6 +64,7 @@ public class StudentClubConroller {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> updateClub(@PathVariable String id, @RequestBody StudentClub studentClub) {
         try {
             var updatedClub = studentClubService.updateClub(id, studentClub);
@@ -70,6 +75,7 @@ public class StudentClubConroller {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteClub(@PathVariable String id) {
         try {
             studentClubService.deleteClub(id);
@@ -82,6 +88,7 @@ public class StudentClubConroller {
     // -------- Membership Management Endpoints ---------
 
     @PostMapping("/{id}/members/{studentId}")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> addMember(@PathVariable String id, @PathVariable String studentId,
             @RequestBody ClubRole clubRole) {
         try {
@@ -93,6 +100,7 @@ public class StudentClubConroller {
     }
 
     @DeleteMapping("/{id}/members/{studentId}")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> removeMember(@PathVariable String id, @PathVariable String studentId) {
         try {
             studentClubService.removeMember(id, studentId);
@@ -103,6 +111,7 @@ public class StudentClubConroller {
     }
 
     @GetMapping("/{id}/members")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> getMembersByClubId(@PathVariable String id){
         
         try {

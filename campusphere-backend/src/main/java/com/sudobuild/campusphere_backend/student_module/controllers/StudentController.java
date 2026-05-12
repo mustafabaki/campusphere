@@ -7,6 +7,7 @@ import com.sudobuild.campusphere_backend.student_module.enums.SocialMediaPlatfor
 import com.sudobuild.campusphere_backend.student_module.services.StudentClubService;
 import com.sudobuild.campusphere_backend.student_module.services.StudentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,6 +22,7 @@ public class StudentController {
     }
 
     @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<?> createStudent(@RequestBody StudentCreateDTO student) {
         try {
             var savedStudent = studentService.create(student);
@@ -31,6 +33,7 @@ public class StudentController {
     }
 
     @GetMapping("/getStudentByEmail")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> getStudentByEmail(@RequestParam("email") String email) {
         try {
             var savedStudent = studentService.getStudentByEmail(email);
@@ -43,6 +46,7 @@ public class StudentController {
     }
 
     @DeleteMapping("deleteStudentById")
+    @PreAuthorize("hasRole('ADMIN')")
     public ApiResponse<?> deleteStudentById(@RequestParam("id") String id) {
         try {
             studentService.deleteStudent(id);
@@ -53,6 +57,7 @@ public class StudentController {
     }
 
     @PutMapping("updateStudentById")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<ApiResponse> updateStudentById(@RequestParam("id") String id,
             @RequestBody StudentCreateDTO student) {
         try {
@@ -64,6 +69,7 @@ public class StudentController {
     }
 
     @PostMapping("addSocialLinkToStudent")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> addSocialLinkToStudent(@RequestParam String studentId, @RequestParam String url,
             @RequestParam SocialMediaPlatform platform) {
         try {
@@ -75,7 +81,8 @@ public class StudentController {
     }
 
     @GetMapping("/{studentId}/clubs")
-    public ResponseEntity<?> getClubsByStudentId(@PathVariable String studentId){
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
+    public ResponseEntity<?> getClubsByStudentId(@PathVariable String studentId) {
         try {
             var clubs = studentClubService.getClubMembershipsByStudentId(studentId);
             return ResponseEntity.ok(ApiResponse.success(clubs));

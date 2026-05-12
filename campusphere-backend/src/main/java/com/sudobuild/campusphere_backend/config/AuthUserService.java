@@ -24,6 +24,7 @@ public class AuthUserService implements UserDetailsService {
         if (foundUser != null) {
             var springUser = User.withUsername(foundUser.getEmail())
                     .password(foundUser.getPassword())
+                    .roles(foundUser.getRole().toString())
                     .build();
             return springUser;
         }
