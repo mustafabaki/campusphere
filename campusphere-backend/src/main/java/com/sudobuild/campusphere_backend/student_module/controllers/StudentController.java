@@ -47,12 +47,12 @@ public class StudentController {
 
     @DeleteMapping("deleteStudentById")
     @PreAuthorize("hasRole('ADMIN')")
-    public ApiResponse<?> deleteStudentById(@RequestParam("id") String id) {
+    public ResponseEntity<?> deleteStudentById(@RequestParam("id") String id) {
         try {
             studentService.deleteStudent(id);
-            return ApiResponse.success(null);
+            return ResponseEntity.ok(ApiResponse.success(null));
         } catch (Exception e) {
-            return ApiResponse.failure(e.getMessage());
+            return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
         }
     }
 
