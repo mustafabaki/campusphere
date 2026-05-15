@@ -101,6 +101,12 @@ public class AuthController {
 
     }
 
+    /**
+     * Updates the mobile device token for push notifications.
+     *
+     * @param deviceTokenDTO The DTO containing the device token and the user's email.
+     * @return A ResponseEntity indicating success or failure of the update operation.
+     */
     @PutMapping("/device-token")
     @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
     public ResponseEntity<?> updateDeviceToken(@RequestBody DeviceTokenDTO deviceTokenDTO) {
