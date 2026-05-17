@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../auxiliary/constants.dart';
 import '../main_shell.dart';
 
@@ -19,6 +20,11 @@ class LoginFunctions {
     
 
     if (response.statusCode == 200) {
+
+      // save the token on SharedPreferences ...
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      var result = jsonDecode(response.body);
+      sharedPreferences.setString("token", result["data"]);
       
       // Navigate to the main application shell
       Navigator.pushReplacement(
