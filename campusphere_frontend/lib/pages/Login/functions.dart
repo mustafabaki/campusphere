@@ -17,15 +17,14 @@ class LoginFunctions {
       headers: <String, String>{"Content-Type": "application/json"},
       body: jsonEncode(<String, String>{"email": email, "password": password}),
     );
-    
 
     if (response.statusCode == 200) {
-
       // save the token on SharedPreferences ...
-      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
       var result = jsonDecode(response.body);
       sharedPreferences.setString("token", result["data"]);
-      
+
       // Navigate to the main application shell
       Navigator.pushReplacement(
         context,
@@ -35,6 +34,36 @@ class LoginFunctions {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Invalid email or password")),
       );
+    }
+  }
+
+  static Future<bool> shouldLogin() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+
+    if (token == null) {
+      return true; // Should login since there's no token
+    } else {
+      try {
+        final parts = token.split('.');
+        final payload = parts[1];
+        final String normalized = base64Url.normalize(payload);
+        final String decoded = utf8.decode(base64Url.decode(normalized));
+        final Map<String, dynamic> data = jsonDecode(decoded);
+
+        if (data.containsKey('exp')) {
+          final int exp = data['exp'];
+          final DateTime expirationDate = DateTime.fromMillisecondsSinceEpoch(
+            exp * 1000,
+          );
+          if (DateTime.now().isAfter(expirationDate)) {
+            return true; // Token has expired, should login
+          }
+        }
+        return false; // Token is valid, no need to login
+      } catch (e) {
+        return true; // Error parsing token, should login
+      }
     }
   }
 }
