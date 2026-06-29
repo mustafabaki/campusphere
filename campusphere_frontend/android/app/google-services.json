@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "34498692880",
+    "project_id": "campusphere-76f06",
+    "storage_bucket": "campusphere-76f06.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:34498692880:android:14dd514809eaa0c25e4795",
+        "android_client_info": {
+          "package_name": "com.example.campusphere_frontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEHf3em2D3XoTtXxFDZVQv_j2PD4qsX1E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

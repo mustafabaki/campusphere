@@ -1,11 +1,19 @@
 import 'package:campusphere_frontend/auxiliary/app_theme.dart';
+import 'package:campusphere_frontend/firebase_options.dart';
 import 'package:campusphere_frontend/pages/Login/functions.dart';
 import 'package:campusphere_frontend/pages/Login/login.dart';
 import 'package:campusphere_frontend/pages/main_shell.dart';
+import 'package:campusphere_frontend/services/push_notification_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialize FCM: request permissions, retrieve token, set up listeners
+  await PushNotificationService().initialize();
+
   runApp(const MyApp());
 }
 

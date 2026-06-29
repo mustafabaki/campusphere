@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../auxiliary/constants.dart';
+import '../../services/push_notification_service.dart';
 import '../main_shell.dart';
 
 class LoginFunctions {
@@ -24,6 +25,9 @@ class LoginFunctions {
           await SharedPreferences.getInstance();
       var result = jsonDecode(response.body);
       sharedPreferences.setString("token", result["data"]);
+
+      // Register the FCM device token with the backend
+      await PushNotificationService.registerDeviceToken();
 
       // Navigate to the main application shell
       Navigator.pushReplacement(

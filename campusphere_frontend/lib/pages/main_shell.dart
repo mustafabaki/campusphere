@@ -27,19 +27,13 @@ class _MainShellState extends State<MainShell> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _pages),
       extendBody: true,
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.85),
           border: Border(
-            top: BorderSide(
-              color: Colors.grey.shade200,
-              width: 1,
-            ),
+            top: BorderSide(color: Colors.grey.shade200, width: 1),
           ),
           boxShadow: [
             BoxShadow(
@@ -179,7 +173,11 @@ class _PlaceholderPage extends StatelessWidget {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.school_outlined, color: AppColors.universityBlue, size: 26),
+            Icon(
+              Icons.school_outlined,
+              color: AppColors.universityBlue,
+              size: 26,
+            ),
             const SizedBox(width: 10),
             Text(
               'CampuSphere',
@@ -211,10 +209,7 @@ class _PlaceholderPage extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Coming soon',
-              style: GoogleFonts.inter(
-                fontSize: 14,
-                color: AppColors.outline,
-              ),
+              style: GoogleFonts.inter(fontSize: 14, color: AppColors.outline),
             ),
           ],
         ),
