@@ -14,3 +14,4 @@ String get baseURL {
 }
 
 const String loginEndpoint = "/api/auth/login";
+const String deviceTokenEndpoint = "/api/auth/device-token";

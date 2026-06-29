@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -14,11 +15,13 @@ import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+import com.sudobuild.campusphere_backend.authentication_module.DTOs.DeviceTokenDTO;
 import com.sudobuild.campusphere_backend.authentication_module.DTOs.LoginDTO;
 import com.sudobuild.campusphere_backend.authentication_module.DTOs.RegisterDTO;
 import com.sudobuild.campusphere_backend.authentication_module.models.CampusphereUser;
@@ -96,6 +99,29 @@ public class AuthController {
             return ResponseEntity.status(500).body(ApiResponse.failure(e.getMessage()));
         }
 
+    }
+
+    /**
+     * Updates the mobile device token for push notifications.
+     *
+     * @param deviceTokenDTO The DTO containing the device token and the user's email.
+     * @return A ResponseEntity indicating success or failure of the update operation.
+     */
+    @PutMapping("/device-token")
+    @PreAuthorize("hasRole('STUDENT') or hasRole('ADMIN')")
+    public ResponseEntity<?> updateDeviceToken(@RequestBody DeviceTokenDTO deviceTokenDTO) {
+        try {
+            // fetch the user
+            CampusphereUser user = userRepository.findByEmail(deviceTokenDTO.getEmail());
+            // update the device token
+            user.setMobileDeviceToken(deviceTokenDTO.getToken());
+            // save the user
+            userRepository.save(user);
+
+            return ResponseEntity.ok(ApiResponse.success("Device token updated successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(ApiResponse.failure(e.getMessage()));
+        }
     }
 
     /**
