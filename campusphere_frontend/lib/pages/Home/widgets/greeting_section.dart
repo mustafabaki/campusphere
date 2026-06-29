@@ -4,7 +4,10 @@ import 'package:campusphere_frontend/auxiliary/app_theme.dart';
 
 /// Greeting section displayed at the top of the home page.
 class GreetingSection extends StatelessWidget {
-  const GreetingSection({super.key});
+  /// The student's first name to display in the greeting.
+  final String studentName;
+
+  const GreetingSection({super.key, required this.studentName});
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +15,7 @@ class GreetingSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Hello, Alex!',
+          'Hello, $studentName!',
           style: GoogleFonts.lexend(
             fontSize: 40,
             fontWeight: FontWeight.w700,

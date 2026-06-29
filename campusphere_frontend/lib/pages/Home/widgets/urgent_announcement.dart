@@ -3,8 +3,22 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:campusphere_frontend/auxiliary/app_theme.dart';
 
 /// Urgent announcement banner shown on the home page.
+///
+/// Accepts [title] and [description] to display dynamic content.
+/// Falls back to hardcoded defaults when no parameters are provided.
 class UrgentAnnouncement extends StatelessWidget {
-  const UrgentAnnouncement({super.key});
+  /// The announcement headline.
+  final String title;
+
+  /// The announcement body text.
+  final String description;
+
+  const UrgentAnnouncement({
+    super.key,
+    this.title = 'Emergency Maintenance',
+    this.description =
+        'Water will be shut off in the North Residence Hall from 2 PM to 4 PM today.',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +42,7 @@ class UrgentAnnouncement extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Emergency Maintenance',
+                  title,
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -37,7 +51,7 @@ class UrgentAnnouncement extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Water will be shut off in the North Residence Hall from 2 PM to 4 PM today.',
+                  description,
                   style: GoogleFonts.inter(
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
