@@ -33,45 +33,14 @@ class HomeFeedService {
     }
   }
 
-  /// Fetches the logged-in student's first name from the backend.
-  ///
-  /// Uses `GET /api/student/getStudentByEmail` with the email extracted
-  /// from the JWT token. Returns the student's first name, or `null`
-  /// on failure.
   static Future<String?> fetchStudentName() async {
     try {
-      final email = await _getEmailFromJwt();
-      if (email == null) {
-        debugPrint('[HomeFeedService] No email found in JWT');
-        return null;
-      }
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
 
-      final prefs = await SharedPreferences.getInstance();
-      final jwt = prefs.getString('token');
-      if (jwt == null) return null;
-
-      final uri = Uri.parse(baseURL + studentByEmailEndpoint)
-          .replace(queryParameters: {'email': email});
-
-      final response = await http.get(
-        uri,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $jwt',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final result = jsonDecode(response.body);
-        if (result['success'] == true && result['data'] != null) {
-          final studentData = result['data'];
-          return studentData['name'] as String?;
-        }
-      } else {
-        debugPrint(
-          '[HomeFeedService] Failed to fetch student — status: ${response.statusCode}',
-        );
-      }
+      // fetch the name of the user from the SharedPreferences...
+      String? name = sharedPreferences.getString("name");
+      return name;
     } catch (e) {
       debugPrint('[HomeFeedService] Error fetching student name: $e');
     }

@@ -55,27 +55,24 @@ class _HomeBodyState extends State<_HomeBody> {
   @override
   void initState() {
     super.initState();
-    _loadHomeData();
+    // fetch the name of the user 
+   HomeFeedService.fetchStudentName().then((name) {
+    setState(() {
+      debugPrint('Name fetched is $name');
+      _studentName = name ?? 'Student';
+      _isLoading = false;
+    });
+   });
+
   }
 
-  Future<void> _loadHomeData() async {
-    final name = await HomeFeedService.fetchStudentName();
-
-    if (mounted) {
-      setState(() {
-        _studentName = name ?? 'Student';
-        _isLoading = false;
-      });
-    }
-  }
+ 
 
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
       return const Center(
-        child: CircularProgressIndicator(
-          color: AppColors.universityBlue,
-        ),
+        child: CircularProgressIndicator(color: AppColors.universityBlue),
       );
     }
 

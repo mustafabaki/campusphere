@@ -29,6 +29,25 @@ class LoginFunctions {
       // Register the FCM device token with the backend
       await PushNotificationService.registerDeviceToken();
 
+      // fetch the name of the user and save it to the SharedPreferences
+      // (must happen BEFORE navigation so the home page can read it)
+      final uri = Uri.parse(
+        baseURL + studentByEmailEndpoint,
+      ).replace(queryParameters: {'email': email});
+
+      final usernameResponse = await http.get(
+        uri,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${result['data']}",
+        },
+      );
+
+      if (usernameResponse.statusCode == 200) {
+        final usernameResult = jsonDecode(usernameResponse.body);
+        sharedPreferences.setString("name", usernameResult["data"]["name"]);
+      }
+
       // Navigate to the main application shell
       Navigator.pushReplacement(
         context,
