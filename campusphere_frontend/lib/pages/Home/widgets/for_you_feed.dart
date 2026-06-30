@@ -85,17 +85,6 @@ class ForYouHeader extends StatelessWidget {
             color: AppColors.onSurface,
           ),
         ),
-        TextButton(
-          onPressed: () {},
-          child: Text(
-            'Filter Interests',
-            style: GoogleFonts.inter(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: AppColors.primaryContainer,
-            ),
-          ),
-        ),
       ],
     );
   }
