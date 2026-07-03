@@ -33,6 +33,12 @@ class HomeFeedService {
     }
   }
 
+  /// Retrieves the student's name from local storage.
+  ///
+  /// Reads the `"name"` key from [SharedPreferences] and returns its value.
+  ///
+  /// Returns the student's name as a [String], or `null` if the name
+  /// is not stored or an error occurs during retrieval.
   static Future<String?> fetchStudentName() async {
     try {
       SharedPreferences sharedPreferences =
