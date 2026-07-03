@@ -60,6 +60,19 @@ class LoginFunctions {
     }
   }
 
+  /// Determines whether the user needs to authenticate.
+  ///
+  /// Checks [SharedPreferences] for a stored JWT token and validates it:
+  /// 1. If no token exists, the user must log in.
+  /// 2. If a token exists, its `exp` (expiration) claim is decoded and
+  ///    compared against the current time.
+  ///
+  /// The JWT payload is extracted by Base64-decoding the second segment
+  /// of the token.
+  ///
+  /// Returns `true` if the user should be redirected to the login screen
+  /// (no token, expired token, or a parsing error), and `false` if the
+  /// token is still valid.
   static Future<bool> shouldLogin() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.getString("token");
