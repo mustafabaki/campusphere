@@ -3,8 +3,35 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:campusphere_frontend/auxiliary/app_theme.dart';
 
 /// Large highlight / hero card on the home page.
+///
+/// Accepts event data to display dynamic content.
+/// Falls back to hardcoded defaults when no parameters are provided.
 class HighlightCard extends StatelessWidget {
-  const HighlightCard({super.key});
+  /// The event title displayed over the hero image.
+  final String title;
+
+  /// The event description shown below the title.
+  final String description;
+
+  /// URL for the background hero image.
+  final String imageUrl;
+
+  /// Category chip label (e.g. 'YOUR MAJOR').
+  final String category;
+
+  /// Time chip label (e.g. '⏱ Today, 3:00 PM').
+  final String eventTime;
+
+  const HighlightCard({
+    super.key,
+    this.title = 'CS 401: AI Ethics Symposium',
+    this.description =
+        'Join industry leaders discussing the implications of large language models in modern software development.',
+    this.imageUrl =
+        'https://lh3.googleusercontent.com/aida-public/AB6AXuBdZKmsptbSIUBDfAdCa8wMYNu6U0r40N4SZvebBHAvZP1E44QXYqVHFkryB0CkuxgrP_dvT-wDuCZUdsWCo03xcFJKzD4gNIalSIewClCSIFtOY4geEkvVgbyY4LBDLSURVL54cBkK60vgnqJfp5oBZKet-hes1b4vI97R1XYxrclg5gWUQBjTwD6Qt1itAiMNqxZyJDtVVNDMTVF2eiNhhrFEPqUeH8mxiVy6lqD6uqKymt0qS7DhJdrokv6RBzQ8VXawckZcFnY',
+    this.category = 'YOUR MAJOR',
+    this.eventTime = '⏱ Today, 3:00 PM',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +45,7 @@ class HighlightCard extends StatelessWidget {
           children: [
             // Background image
             Image.network(
-              'https://lh3.googleusercontent.com/aida-public/AB6AXuBdZKmsptbSIUBDfAdCa8wMYNu6U0r40N4SZvebBHAvZP1E44QXYqVHFkryB0CkuxgrP_dvT-wDuCZUdsWCo03xcFJKzD4gNIalSIewClCSIFtOY4geEkvVgbyY4LBDLSURVL54cBkK60vgnqJfp5oBZKet-hes1b4vI97R1XYxrclg5gWUQBjTwD6Qt1itAiMNqxZyJDtVVNDMTVF2eiNhhrFEPqUeH8mxiVy6lqD6uqKymt0qS7DhJdrokv6RBzQ8VXawckZcFnY',
+              imageUrl,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
                   Container(color: AppColors.primaryContainer),
@@ -51,13 +78,13 @@ class HighlightCard extends StatelessWidget {
                   Row(
                     children: [
                       _Chip(
-                        label: 'YOUR MAJOR',
+                        label: category,
                         bgColor: AppColors.secondaryContainer,
                         textColor: AppColors.onSecondaryContainer,
                       ),
                       const SizedBox(width: 8),
                       _Chip(
-                        label: '⏱ Today, 3:00 PM',
+                        label: eventTime,
                         bgColor: Colors.white.withValues(alpha: 0.2),
                         textColor: Colors.white,
                       ),
@@ -65,7 +92,7 @@ class HighlightCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    'CS 401: AI Ethics Symposium',
+                    title,
                     style: GoogleFonts.lexend(
                       fontSize: 26,
                       fontWeight: FontWeight.w600,
@@ -75,7 +102,7 @@ class HighlightCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Join industry leaders discussing the implications of large language models in modern software development.',
+                    description,
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,

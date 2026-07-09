@@ -43,25 +43,11 @@ class QuickTools extends StatelessWidget {
                   label: 'Dining Menus',
                 ),
               ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _QuickToolButton(
-                  icon: Icons.directions_bus_outlined,
-                  label: 'Transit App',
-                ),
-              ),
             ],
           ),
           const SizedBox(height: 10),
           Row(
             children: [
-              Expanded(
-                child: _QuickToolButton(
-                  icon: Icons.menu_book_outlined,
-                  label: 'Book Study Rm',
-                ),
-              ),
-              const SizedBox(width: 10),
               Expanded(
                 child: _QuickToolButton(
                   icon: Icons.help_outline,

@@ -2,9 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:campusphere_frontend/auxiliary/app_theme.dart';
 
+/// Data class representing a single community board post.
+class CommunityPostItem {
+  final String title;
+  final String description;
+
+  const CommunityPostItem({
+    required this.title,
+    required this.description,
+  });
+}
+
+/// Default hardcoded community posts used when no data is provided.
+const List<CommunityPostItem> _defaultPosts = [
+  CommunityPostItem(
+    title: 'Lost Keys near Library',
+    description: 'Lanyard with a red tag. Turned into front desk.',
+  ),
+  CommunityPostItem(
+    title: 'Selling Bio 101 Textbook',
+    description: 'Good condition, \$40 OBO. Contact Mike M.',
+  ),
+];
+
 /// Community bulletin board section on the home page.
+///
+/// Accepts an optional [posts] list of [CommunityPostItem]. Falls back
+/// to hardcoded defaults when the list is empty or not provided.
 class CommunityBoard extends StatelessWidget {
-  const CommunityBoard({super.key});
+  /// The list of community posts to display.
+  final List<CommunityPostItem> posts;
+
+  const CommunityBoard({super.key, this.posts = _defaultPosts});
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +74,25 @@ class CommunityBoard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 16),
-          // Item 1
-          const _CommunityBoardItem(
-            title: 'Lost Keys near Library',
-            description: 'Lanyard with a red tag. Turned into front desk.',
-            showDivider: true,
-          ),
-          // Item 2
-          const _CommunityBoardItem(
-            title: 'Selling Bio 101 Textbook',
-            description: 'Good condition, \$40 OBO. Contact Mike M.',
-            showDivider: false,
-          ),
+          if (posts.isEmpty)
+            Text(
+              'No community posts yet.',
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: AppColors.onSurfaceVariant,
+              ),
+            )
+          else
+            ...posts.asMap().entries.map((entry) {
+              final index = entry.key;
+              final post = entry.value;
+              final isLast = index == posts.length - 1;
+              return _CommunityBoardItem(
+                title: post.title,
+                description: post.description,
+                showDivider: !isLast,
+              );
+            }),
         ],
       ),
     );

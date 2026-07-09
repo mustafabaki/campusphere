@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:campusphere_frontend/auxiliary/app_theme.dart';
+import 'package:campusphere_frontend/services/home_feed_service.dart';
 import 'package:campusphere_frontend/pages/Home/widgets/greeting_section.dart';
 import 'package:campusphere_frontend/pages/Home/widgets/urgent_announcement.dart';
 import 'package:campusphere_frontend/pages/Home/widgets/highlight_card.dart';
@@ -40,13 +41,43 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class _HomeBody extends StatelessWidget {
+class _HomeBody extends StatefulWidget {
   const _HomeBody();
 
   @override
+  State<_HomeBody> createState() => _HomeBodyState();
+}
+
+class _HomeBodyState extends State<_HomeBody> {
+  String _studentName = '';
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    // fetch the name of the user 
+   HomeFeedService.fetchStudentName().then((name) {
+    setState(() {
+      debugPrint('Name fetched is $name');
+      _studentName = name ?? 'Student';
+      _isLoading = false;
+    });
+   });
+
+  }
+
+ 
+
+  @override
   Widget build(BuildContext context) {
-    return const SingleChildScrollView(
-      padding: EdgeInsets.only(
+    if (_isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.universityBlue),
+      );
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(
         left: 20,
         right: 20,
         top: 24,
@@ -56,27 +87,27 @@ class _HomeBody extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ── Greeting ─────────────────────────────────────
-          GreetingSection(),
-          SizedBox(height: 20),
+          GreetingSection(studentName: _studentName),
+          const SizedBox(height: 20),
 
           // ── Urgent Announcement ──────────────────────────
-          UrgentAnnouncement(),
-          SizedBox(height: 24),
+          const UrgentAnnouncement(),
+          const SizedBox(height: 24),
 
           // ── Highlight Card ──────────────────────────────
-          HighlightCard(),
-          SizedBox(height: 28),
+          const HighlightCard(),
+          const SizedBox(height: 28),
 
           // ── For You Feed ────────────────────────────────
-          ForYouFeed(),
-          SizedBox(height: 24),
+          const ForYouFeed(),
+          const SizedBox(height: 24),
 
           // ── Quick Tools ─────────────────────────────────
-          QuickTools(),
-          SizedBox(height: 24),
+          const QuickTools(),
+          const SizedBox(height: 24),
 
           // ── Community Board ─────────────────────────────
-          CommunityBoard(),
+          const CommunityBoard(),
         ],
       ),
     );
