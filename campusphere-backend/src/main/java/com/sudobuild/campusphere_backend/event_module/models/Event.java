@@ -84,6 +84,11 @@ public class Event {
     private EventCategory category;
 
     /**
+     * The maximum number of attendees allowed for the event.
+     */
+    private int capacity;
+
+    /**
      * The current lifecycle status of the event.
      */
     @Enumerated(EnumType.STRING)
