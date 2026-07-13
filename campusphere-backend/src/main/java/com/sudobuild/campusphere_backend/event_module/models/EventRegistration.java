@@ -18,10 +18,12 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
 
-@Entity
-@Table(name="event_registrations")
+
 @Getter
 @Setter
+@Entity
+@Table(name="event_registrations")
+
 /**
  * Represents a student's registration for a specific event.
  */
