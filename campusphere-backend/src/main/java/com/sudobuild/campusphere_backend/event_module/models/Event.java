@@ -89,6 +89,11 @@ public class Event {
     private int capacity;
 
     /**
+     * The current number of attendees registered for the event.
+     */
+    private int currentAttendees;
+
+    /**
      * The current lifecycle status of the event.
      */
     @Enumerated(EnumType.STRING)
