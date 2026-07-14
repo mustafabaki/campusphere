@@ -2,8 +2,6 @@ package com.sudobuild.campusphere_backend.event_module.models;
 
 import java.time.Instant;
 
-import org.springframework.data.annotation.Id;
-
 import com.sudobuild.campusphere_backend.event_module.enums.EventRegistrationStatus;
 import com.sudobuild.campusphere_backend.student_module.models.Student;
 
@@ -12,6 +10,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
