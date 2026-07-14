@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
+/**
+ * Implementation of the {@link EventService} interface.
+ * Provides business logic for managing events and event registrations.
+ */
 @Service
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
@@ -25,6 +29,14 @@ public class EventServiceImpl implements EventService {
     private final EventRegistrationRepository eventRegistrationRepository;
 
 
+    /**
+     * Constructs an instance of {@code EventServiceImpl}.
+     *
+     * @param eventRepository the repository for event operations
+     * @param studentClubRepository the repository for student club operations
+     * @param studentRepository the repository for student operations
+     * @param eventRegistrationRepository the repository for event registration operations
+     */
     public EventServiceImpl(EventRepository eventRepository, StudentClubRepository studentClubRepository, StudentRepository studentRepository, EventRegistrationRepository eventRegistrationRepository) {
         this.eventRepository = eventRepository;
         this.studentClubRepository = studentClubRepository;
@@ -32,6 +44,13 @@ public class EventServiceImpl implements EventService {
         this.eventRegistrationRepository = eventRegistrationRepository;
     }
 
+    /**
+     * Creates a new event.
+     *
+     * @param event the event to create
+     * @return the created event
+     * @throws RuntimeException if the event end time is not after the start time
+     */
     @Override
     public Event createEvent(Event event) {
         try {
@@ -45,12 +64,71 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    /**
+     * Updates an existing event. Only non-null fields in the provided event object will be updated.
+     *
+     * @param event the event containing the updated details
+     * @return the updated event
+     * @throws RuntimeException if the event is not found, or if the new capacity is less than the current number of attendees
+     */
     @Override
     public Event updateEvent(Event event) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateEvent'");
+       try {
+            // fetch the event fro database
+            var savedEvent = eventRepository.findById(event.getId()).orElseThrow(() -> new RuntimeException("Event not found with id: " + event.getId()));
+
+            // only update the non null attributes
+            if(event.getCapacity() > 0) {
+                event.setCapacity(event.getCapacity());
+                if(savedEvent.getCurrentAttendees() > event.getCapacity()) {
+                    throw new RuntimeException("The new event capacity " + event.getCapacity() + " is less than the current number of attendees " + savedEvent.getCurrentAttendees() + ".");
+                }
+            }
+
+            if(event.getEndTime() != null) {
+                event.setEndTime(event.getEndTime());
+            }
+
+            if(event.getStartTime() != null) {
+                event.setStartTime(event.getStartTime());
+            }
+
+            if(event.getTitle() != null) {
+                event.setTitle(event.getTitle());
+            }
+
+            if(event.getDescription() != null) {
+                event.setDescription(event.getDescription());
+            }
+
+            if(event.getLocation() != null) {
+                event.setLocation(event.getLocation());
+            }
+
+            if(event.getStatus() != null) {
+                event.setStatus(event.getStatus());
+            }
+
+            if(event.getDepartmentOrganizer() != null) {
+                event.setDepartmentOrganizer(event.getDepartmentOrganizer());
+            }
+
+            if(event.getStudentClubOrganizer() != null) {
+                event.setStudentClubOrganizer(event.getStudentClubOrganizer());
+            }
+
+            return eventRepository.save(event);
+       } catch (Exception e) {
+        throw e;
+       }
     }
 
+    /**
+     * Deletes an event by its ID.
+     *
+     * @param eventId the ID of the event to delete
+     * @return {@code true} if the event was successfully deleted, {@code false} if the event was not found
+     */
     @Override
     public boolean deleteEvent(String eventId) {
         // check if the event is null.
@@ -68,6 +146,12 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    /**
+     * Retrieves an event by its ID.
+     *
+     * @param id the ID of the event
+     * @return the event if found, or {@code null} if not found
+     */
     @Override
     public Event getEventById(String id) {
         try {
@@ -82,6 +166,13 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    /**
+     * Retrieves a paginated list of all upcoming events.
+     *
+     * @param pageNumber the page number to retrieve
+     * @param pageSize the number of items per page
+     * @return a slice of upcoming events
+     */
     @Override
     public Slice<Event> getAllUpcomingEvents(int pageNumber, int pageSize) {
         try {
@@ -92,6 +183,14 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    /**
+     * Retrieves a paginated list of all events organized by a specific department.
+     *
+     * @param department the department
+     * @param pageNumber the page number to retrieve
+     * @param pageSize the number of items per page
+     * @return a slice of events for the specified department
+     */
     @Override
     public Slice<Event> getAllEventsOfDepartment(Department department, int pageNumber, int pageSize) {
         try {
@@ -102,6 +201,15 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    /**
+     * Retrieves a paginated list of all events organized by a specific student club.
+     *
+     * @param clubId the ID of the student club
+     * @param pageNumber the page number to retrieve
+     * @param pageSize the number of items per page
+     * @return a slice of events for the specified club
+     * @throws RuntimeException if the club is not found
+     */
     @Override
     public Slice<Event> getAllClubEvents(String clubId, int pageNumber, int pageSize) {
         try {
@@ -114,6 +222,14 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    /**
+     * Registers a student for an event.
+     *
+     * @param eventId the ID of the event
+     * @param studentId the ID of the student
+     * @return the created event registration
+     * @throws RuntimeException if the event is not found, the event is full, or the student is not found
+     */
     @Override
     public EventRegistration registerForEvent(String eventId, String studentId) {
         // find the event
@@ -146,6 +262,13 @@ public class EventServiceImpl implements EventService {
 
     }
 
+    /**
+     * Cancels an existing event registration.
+     *
+     * @param eventRegistrationId the ID of the event registration to cancel
+     * @return the updated event registration with a cancelled status
+     * @throws RuntimeException if the event registration is not found
+     */
     @Override
     public EventRegistration cancelEventRegistration(String eventRegistrationId) {
         // find the event registration
@@ -156,6 +279,13 @@ public class EventServiceImpl implements EventService {
         return eventRegistrationRepository.save(eventRegistration);
     }
 
+    /**
+     * Marks attendance for an event registration.
+     *
+     * @param eventRegistrationId the ID of the event registration
+     * @return the updated event registration with an attended status
+     * @throws RuntimeException if the event registration is not found
+     */
     @Override
     public EventRegistration markAttendance(String eventRegistrationId) {
        // find the event registration
@@ -166,6 +296,15 @@ public class EventServiceImpl implements EventService {
         return eventRegistrationRepository.save(eventRegistration);
     }
 
+    /**
+     * Retrieves a paginated list of event registrations marked as attended for a specific event.
+     *
+     * @param eventId the ID of the event
+     * @param pageNumber the page number to retrieve
+     * @param pageSize the number of items per page
+     * @return a slice of attended event registrations
+     * @throws RuntimeException if the event is not found
+     */
     @Override
     public Slice<EventRegistration> getEventAttendanceList(String eventId, int pageNumber, int pageSize) {
        // set the pageable object
