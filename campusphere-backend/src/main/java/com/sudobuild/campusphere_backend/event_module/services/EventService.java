@@ -1,15 +1,15 @@
 package com.sudobuild.campusphere_backend.event_module.services;
 
-import java.util.List;
-
 import com.sudobuild.campusphere_backend.event_module.models.Event;
 import com.sudobuild.campusphere_backend.event_module.models.EventRegistration;
+import com.sudobuild.campusphere_backend.student_module.enums.Department;
+import org.springframework.data.domain.Slice;
 
 /**
  * Service interface for managing events and event registrations.
  */
 public interface EventService {
-    
+
     /**
      * Creates a new event.
      *
@@ -29,10 +29,10 @@ public interface EventService {
     /**
      * Deletes an event.
      *
-     * @param event the event to delete
-     * @return the deleted event
+     * @param eventId the id of event to delete
+     * @return if the event is deleted successfully
      */
-    Event deleteEvent(Event event);
+    boolean deleteEvent(String eventId);
 
     /**
      * Retrieves an event by its unique ID.
@@ -43,32 +43,38 @@ public interface EventService {
     Event getEventById(String id);
 
     /**
-     * Retrieves a list of all upcoming events.
+     * Retrieves a paginated list of all upcoming events.
      *
-     * @return a list of upcoming events
+     * @param pageNumber the page number to retrieve (0-indexed)
+     * @param pageSize   the number of events per page
+     * @return a {@link Slice} of upcoming events
      */
-    List<Event> getAllUpcomingEvents();
+    Slice<Event> getAllUpcomingEvents(int pageNumber, int pageSize);
 
     /**
-     * Retrieves a list of all events associated with a specific department.
+     * Retrieves a paginated list of all events associated with a specific department.
      *
      * @param departmentId the unique identifier of the department
-     * @return a list of events for the specified department
+     * @param pageNumber   the page number to retrieve (0-indexed)
+     * @param pageSize     the number of events per page
+     * @return a {@link Slice} of events for the specified department
      */
-    List<Event> getAllEventsOfDepartment(String departmentId);
+    Slice<Event> getAllEventsOfDepartment(Department department, int pageNumber, int pageSize);
 
     /**
-     * Retrieves a list of all events associated with a specific club.
+     * Retrieves a paginated list of all events associated with a specific club.
      *
-     * @param clubId the unique identifier of the club
-     * @return a list of events for the specified club
+     * @param clubId     the unique identifier of the club
+     * @param pageNumber the page number to retrieve (0-indexed)
+     * @param pageSize   the number of events per page
+     * @return a {@link Slice} of events for the specified club
      */
-    List<Event> getAllClubEvents(String clubId);
+    Slice<Event> getAllClubEvents(String clubId, int pageNumber, int pageSize);
 
     /**
      * Registers a student for a specific event.
      *
-     * @param eventId the unique identifier of the event
+     * @param eventId   the unique identifier of the event
      * @param studentId the unique identifier of the student
      * @return the resulting event registration
      */
@@ -77,7 +83,8 @@ public interface EventService {
     /**
      * Cancels an existing event registration.
      *
-     * @param eventRegistrationId the unique identifier of the event registration to cancel
+     * @param eventRegistrationId the unique identifier of the event registration to
+     *                            cancel
      * @return the cancelled event registration
      */
     EventRegistration cancelEventRegistration(String eventRegistrationId);
@@ -91,10 +98,12 @@ public interface EventService {
     EventRegistration markAttendance(String eventRegistrationId);
 
     /**
-     * Retrieves the list of event registrations (attendance list) for a specific event.
+     * Retrieves a paginated list of event registrations (attendance list) for a specific event.
      *
-     * @param eventId the unique identifier of the event
-     * @return a list of event registrations for the specified event
+     * @param eventId    the unique identifier of the event
+     * @param pageNumber the page number to retrieve (0-indexed)
+     * @param pageSize   the number of registrations per page
+     * @return a {@link Slice} of {@link EventRegistration} objects representing the attendance list
      */
-    List<EventRegistration> getEventAttendanceList(String eventId);
+    Slice<EventRegistration> getEventAttendanceList(String eventId, int pageNumber, int pageSize);
 }
