@@ -310,11 +310,8 @@ public class EventServiceImpl implements EventService {
        // set the pageable object
         Pageable pageable = PageRequest.of(pageNumber, pageSize);
 
-        // find the event
-        var event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found with id: " + eventId));
-
-        // get the rows where the event registration status is attended
-        return eventRegistrationRepository.findByStatus(EventRegistrationStatus.ATTENDED, pageable);
+        // get the rows where the event registration status is attended for the given event id
+        return eventRegistrationRepository.findByStatusAndEvent(EventRegistrationStatus.ATTENDED, eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found with id: " + eventId)), pageable);
 
     }
 
