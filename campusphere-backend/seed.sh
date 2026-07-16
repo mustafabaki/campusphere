@@ -61,11 +61,11 @@ echo "=========================================="
 declare -a STUDENT_IDS
 
 STUDENTS=(
-  '{"name":"Alex","surname":"Miller","email":"alex.miller@university.edu","phone":"+15551234567","profilePictureURL":"https://i.pravatar.cc/150?img=1","department":"COMPUTER_ENGINEERING","socialLinks":[]}'
-  '{"name":"Sarah","surname":"Johnson","email":"sarah.johnson@university.edu","phone":"+15552345678","profilePictureURL":"https://i.pravatar.cc/150?img=5","department":"ELECTRICAL_ENGINEERING","socialLinks":[]}'
-  '{"name":"Michael","surname":"Chen","email":"michael.chen@university.edu","phone":"+15553456789","profilePictureURL":"https://i.pravatar.cc/150?img=3","department":"MATHEMATICS","socialLinks":[]}'
-  '{"name":"Emily","surname":"Davis","email":"emily.davis@university.edu","phone":"+15554567890","profilePictureURL":"https://i.pravatar.cc/150?img=9","department":"PHYSICS","socialLinks":[]}'
-  '{"name":"David","surname":"Anderson","email":"david.anderson@university.edu","phone":"+15555678901","profilePictureURL":"https://i.pravatar.cc/150?img=7","department":"BUSINESS_ADMINISTRATION","socialLinks":[]}'
+  '{"name":"Alex","surname":"Miller","email":"alex.miller@university.edu","phone":"+15551234567","profilePictureURL":"https://i.pravatar.cc/150?img=1","department":"COMPUTER_ENGINEERING","socialLinks":[{"platformName":"LINKEDIN","url":"https://linkedin.com/in/alexmiller"},{"platformName":"GITHUB","url":"https://github.com/alexmiller"}]}'
+  '{"name":"Sarah","surname":"Johnson","email":"sarah.johnson@university.edu","phone":"+15552345678","profilePictureURL":"https://i.pravatar.cc/150?img=5","department":"ELECTRICAL_ENGINEERING","socialLinks":[{"platformName":"LINKEDIN","url":"https://linkedin.com/in/sarahjohnson"},{"platformName":"X","url":"https://twitter.com/sarahj_eng"}]}'
+  '{"name":"Michael","surname":"Chen","email":"michael.chen@university.edu","phone":"+15553456789","profilePictureURL":"https://i.pravatar.cc/150?img=3","department":"MATHEMATICS","socialLinks":[{"platformName":"LINKEDIN","url":"https://linkedin.com/in/michaelchen"},{"platformName":"GITHUB","url":"https://github.com/mchen_math"}]}'
+  '{"name":"Emily","surname":"Davis","email":"emily.davis@university.edu","phone":"+15554567890","profilePictureURL":"https://i.pravatar.cc/150?img=9","department":"PHYSICS","socialLinks":[{"platformName":"LINKEDIN","url":"https://linkedin.com/in/emilydavis"},{"platformName":"X","url":"https://twitter.com/emily_physics"}]}'
+  '{"name":"David","surname":"Anderson","email":"david.anderson@university.edu","phone":"+15555678901","profilePictureURL":"https://i.pravatar.cc/150?img=7","department":"BUSINESS_ADMINISTRATION","socialLinks":[{"platformName":"LINKEDIN","url":"https://linkedin.com/in/davidanderson"},{"platformName":"X","url":"https://twitter.com/david_biz"}]}'
 )
 
 for i in "${!STUDENTS[@]}"; do
