@@ -48,6 +48,11 @@ public class Event {
     private String description;
 
     /**
+     * The URL of the main image associated with the event.
+     */
+    private String coverImageUrl;
+
+    /**
      * The physical or virtual location where the event takes place.
      */
     private String location;
