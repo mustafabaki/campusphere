@@ -11,4 +11,6 @@ public interface EventRegistrationRepository extends JpaRepository<EventRegistra
     Slice<EventRegistration> findByStatus(EventRegistrationStatus status, Pageable pageable);
 
     Slice<EventRegistration> findByStatusAndEvent(EventRegistrationStatus status, Event event, Pageable pageable);
+
+    void deleteByEvent(Event event);
 }

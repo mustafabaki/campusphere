@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
@@ -134,12 +135,14 @@ public class EventServiceImpl implements EventService {
      * @return {@code true} if the event was successfully deleted, {@code false} if the event was not found
      */
     @Override
+    @Transactional
     public boolean deleteEvent(String eventId) {
         // check if the event is null.
         try {
             Event event = eventRepository.findById(eventId).orElseGet(null);
 
             if (event != null) {
+                this.eventRegistrationRepository.deleteByEvent(event);
                 this.eventRepository.delete(event);
                 return true;
             }

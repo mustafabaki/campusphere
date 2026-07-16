@@ -61,11 +61,11 @@ echo "=========================================="
 declare -a STUDENT_IDS
 
 STUDENTS=(
-  '{"name":"Alex","surname":"Miller","email":"alex.miller@university.edu","phone":"+15551234567","profilePictureURL":"https://i.pravatar.cc/150?img=1","department":"COMPUTER_ENGINEERING","socialLinks":[{"platformName":"LINKEDIN","url":"https://linkedin.com/in/alexmiller"},{"platformName":"GITHUB","url":"https://github.com/alexmiller"}]}'
-  '{"name":"Sarah","surname":"Johnson","email":"sarah.johnson@university.edu","phone":"+15552345678","profilePictureURL":"https://i.pravatar.cc/150?img=5","department":"ELECTRICAL_ENGINEERING","socialLinks":[{"platformName":"LINKEDIN","url":"https://linkedin.com/in/sarahjohnson"},{"platformName":"X","url":"https://twitter.com/sarahj_eng"}]}'
-  '{"name":"Michael","surname":"Chen","email":"michael.chen@university.edu","phone":"+15553456789","profilePictureURL":"https://i.pravatar.cc/150?img=3","department":"MATHEMATICS","socialLinks":[{"platformName":"LINKEDIN","url":"https://linkedin.com/in/michaelchen"},{"platformName":"GITHUB","url":"https://github.com/mchen_math"}]}'
-  '{"name":"Emily","surname":"Davis","email":"emily.davis@university.edu","phone":"+15554567890","profilePictureURL":"https://i.pravatar.cc/150?img=9","department":"PHYSICS","socialLinks":[{"platformName":"LINKEDIN","url":"https://linkedin.com/in/emilydavis"},{"platformName":"X","url":"https://twitter.com/emily_physics"}]}'
-  '{"name":"David","surname":"Anderson","email":"david.anderson@university.edu","phone":"+15555678901","profilePictureURL":"https://i.pravatar.cc/150?img=7","department":"BUSINESS_ADMINISTRATION","socialLinks":[{"platformName":"LINKEDIN","url":"https://linkedin.com/in/davidanderson"},{"platformName":"X","url":"https://twitter.com/david_biz"}]}'
+  '{"name":"Alex","surname":"Miller","email":"alex.miller@university.edu","phone":"+15551234567","profilePictureURL":"https://i.pravatar.cc/150?img=1","department":"COMPUTER_ENGINEERING","socialLinks":[]}'
+  '{"name":"Sarah","surname":"Johnson","email":"sarah.johnson@university.edu","phone":"+15552345678","profilePictureURL":"https://i.pravatar.cc/150?img=5","department":"ELECTRICAL_ENGINEERING","socialLinks":[]}'
+  '{"name":"Michael","surname":"Chen","email":"michael.chen@university.edu","phone":"+15553456789","profilePictureURL":"https://i.pravatar.cc/150?img=3","department":"MATHEMATICS","socialLinks":[]}'
+  '{"name":"Emily","surname":"Davis","email":"emily.davis@university.edu","phone":"+15554567890","profilePictureURL":"https://i.pravatar.cc/150?img=9","department":"PHYSICS","socialLinks":[]}'
+  '{"name":"David","surname":"Anderson","email":"david.anderson@university.edu","phone":"+15555678901","profilePictureURL":"https://i.pravatar.cc/150?img=7","department":"BUSINESS_ADMINISTRATION","socialLinks":[]}'
 )
 
 for i in "${!STUDENTS[@]}"; do
@@ -88,6 +88,39 @@ done
 
 echo ""
 echo "Created ${#STUDENT_IDS[@]} students."
+
+# ---- Step 3b: Add Social Links to Students ----
+echo ""
+echo "=========================================="
+echo ">>> Step 3b: Adding Social Links to Students..."
+echo "=========================================="
+
+if [ ${#STUDENT_IDS[@]} -ge 5 ]; then
+  # Alex
+  curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=${STUDENT_IDS[0]}&url=https://linkedin.com/in/alexmiller&platform=LINKEDIN" -H "$AUTH_HEADER" > /dev/null
+  curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=${STUDENT_IDS[0]}&url=https://github.com/alexmiller&platform=GITHUB" -H "$AUTH_HEADER" > /dev/null
+  
+  # Sarah
+  curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=${STUDENT_IDS[1]}&url=https://linkedin.com/in/sarahjohnson&platform=LINKEDIN" -H "$AUTH_HEADER" > /dev/null
+  curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=${STUDENT_IDS[1]}&url=https://twitter.com/sarahj_eng&platform=X" -H "$AUTH_HEADER" > /dev/null
+  
+  # Michael
+  curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=${STUDENT_IDS[2]}&url=https://linkedin.com/in/michaelchen&platform=LINKEDIN" -H "$AUTH_HEADER" > /dev/null
+  curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=${STUDENT_IDS[2]}&url=https://github.com/mchen_math&platform=GITHUB" -H "$AUTH_HEADER" > /dev/null
+
+  # Emily
+  curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=${STUDENT_IDS[3]}&url=https://linkedin.com/in/emilydavis&platform=LINKEDIN" -H "$AUTH_HEADER" > /dev/null
+  curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=${STUDENT_IDS[3]}&url=https://twitter.com/emily_physics&platform=X" -H "$AUTH_HEADER" > /dev/null
+
+  # David
+  curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=${STUDENT_IDS[4]}&url=https://linkedin.com/in/davidanderson&platform=LINKEDIN" -H "$AUTH_HEADER" > /dev/null
+  curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=${STUDENT_IDS[4]}&url=https://twitter.com/david_biz&platform=X" -H "$AUTH_HEADER" > /dev/null
+
+  echo "  Social links added successfully."
+else
+  echo "  Not enough students created to add social links."
+fi
+
 
 # ---- Step 4: Create Clubs ----
 echo ""
