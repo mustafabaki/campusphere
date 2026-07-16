@@ -117,6 +117,10 @@ public class EventServiceImpl implements EventService {
                 event.setStudentClubOrganizer(event.getStudentClubOrganizer());
             }
 
+            if(event.getCoverImageUrl() != null) {
+                event.setCoverImageUrl(event.getCoverImageUrl());
+            }
+
             return eventRepository.save(event);
        } catch (Exception e) {
         throw e;
