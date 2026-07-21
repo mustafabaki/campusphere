@@ -9,107 +9,108 @@ import 'package:campusphere_frontend/pages/Home/widgets/for_you_feed.dart';
 import 'package:campusphere_frontend/pages/Home/widgets/quick_tools.dart';
 import 'package:campusphere_frontend/pages/Home/widgets/community_board.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(appBar: _buildAppBar(), body: const _HomeBody());
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      centerTitle: true,
-      leading: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: const CircleAvatar(
-          backgroundImage: NetworkImage(
-            'https://www.simplelyst.com/_image-uploads/profile_photo-agents-agent-2-87173.jpg',
-          ),
-        ),
-      ),
-      title: Text(
-        'CampuSphere',
-        style: GoogleFonts.lexend(
-          fontSize: 20,
-          fontWeight: FontWeight.w800,
-          color: AppColors.universityBlue,
-          letterSpacing: -0.5,
-        ),
-      ),
-    );
-  }
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomeBody extends StatefulWidget {
-  const _HomeBody();
-
-  @override
-  State<_HomeBody> createState() => _HomeBodyState();
-}
-
-class _HomeBodyState extends State<_HomeBody> {
+class _HomePageState extends State<HomePage> {
+  String profileURL = "";
   String _studentName = '';
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    // fetch the name of the user 
-   HomeFeedService.fetchStudentName().then((name) {
-    setState(() {
-      debugPrint('Name fetched is $name');
-      _studentName = name ?? 'Student';
-      _isLoading = false;
+    HomeFeedService.fetchStudentName().then((name) {
+      setState(() {
+        _studentName = name ?? 'Student';
+        _isLoading = false;
+      });
+      HomeFeedService.fetchProfilePictureURL().then((url) {
+        setState(() {
+          profileURL = url ?? "";
+        });
+      });
     });
-   });
-
   }
-
- 
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.universityBlue),
-      );
-    }
-
-    return SingleChildScrollView(
-      padding: const EdgeInsets.only(
-        left: 20,
-        right: 20,
-        top: 24,
-        bottom: 100, // room for bottom nav
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        leading: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: profileURL.isNotEmpty
+              ? CircleAvatar(backgroundImage: NetworkImage(profileURL))
+              : CircleAvatar(
+                  radius: 30, // Controls the size (60px diameter)
+                  backgroundColor:
+                      Colors.blue.shade800, // Background fill color
+                  child: Text(
+                    _studentName
+                        .substring(0, 1)
+                        .toUpperCase(), // The user's initials
+                    style: TextStyle(
+                      color: Colors.white, // Text color
+                      fontSize: 20, // Scale text to fit radius
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+        ),
+        title: Text(
+          'CampuSphere',
+          style: GoogleFonts.lexend(
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            color: AppColors.universityBlue,
+            letterSpacing: -0.5,
+          ),
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // ── Greeting ─────────────────────────────────────
-          GreetingSection(studentName: _studentName),
-          const SizedBox(height: 20),
+      body: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(color: AppColors.universityBlue),
+            )
+          : SingleChildScrollView(
+              padding: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 24,
+                bottom: 100, // room for bottom nav
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ── Greeting ─────────────────────────────────────
+                  GreetingSection(studentName: _studentName),
+                  const SizedBox(height: 20),
 
-          // ── Urgent Announcement ──────────────────────────
-          const UrgentAnnouncement(),
-          const SizedBox(height: 24),
+                  // ── Urgent Announcement ──────────────────────────
+                  const UrgentAnnouncement(),
+                  const SizedBox(height: 24),
 
-          // ── Highlight Card ──────────────────────────────
-          const HighlightCard(),
-          const SizedBox(height: 28),
+                  // ── Highlight Card ──────────────────────────────
+                  const HighlightCard(),
+                  const SizedBox(height: 28),
 
-          // ── For You Feed ────────────────────────────────
-          const ForYouFeed(),
-          const SizedBox(height: 24),
+                  // ── For You Feed ────────────────────────────────
+                  const ForYouFeed(),
+                  const SizedBox(height: 24),
 
-          // ── Quick Tools ─────────────────────────────────
-          const QuickTools(),
-          const SizedBox(height: 24),
+                  // ── Quick Tools ─────────────────────────────────
+                  const QuickTools(),
+                  const SizedBox(height: 24),
 
-          // ── Community Board ─────────────────────────────
-          const CommunityBoard(),
-        ],
-      ),
+                  // ── Community Board ─────────────────────────────
+                  const CommunityBoard(),
+                ],
+              ),
+            ),
     );
   }
 }

@@ -27,4 +27,26 @@ class HomeFeedService {
     }
     return null;
   }
+
+  /// Retrieves the student's profile picture URL from local storage.
+  ///
+  /// Reads the `"profilePictureURL"` key from [SharedPreferences] and returns its value.
+  ///
+  /// Returns the profile picture URL as a [String], or `null` if the URL
+  /// is not stored or an error occurs during retrieval.
+  static Future<String?> fetchProfilePictureURL() async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+
+      // fetch the profile picture URL of the user from the SharedPreferences...
+      String? profilePictureURL = sharedPreferences.getString("profilePictureURL");
+      return profilePictureURL;
+    } catch (e) {
+      debugPrint('[HomeFeedService] Error fetching profile picture URL: $e');
+    }
+    return null;
+  }
+
+  
 }
