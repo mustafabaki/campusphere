@@ -222,4 +222,20 @@ public class EventController {
         }
     }
 
+
+    /**
+     * Retrieves a random upcoming event.
+     *
+     * @return a ResponseEntity containing an ApiResponse with a random upcoming event or an error message
+     */
+    @GetMapping("/getRandomUpcomingEvent")
+    public ResponseEntity<?> getRandomEvent() {
+        try {
+            var data = eventService.getRandomUpcomingEvent();
+            return ResponseEntity.ok(ApiResponse.success(data));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
+        }
+    }
+
 }

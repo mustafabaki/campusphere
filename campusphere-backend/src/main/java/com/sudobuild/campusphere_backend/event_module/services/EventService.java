@@ -106,4 +106,11 @@ public interface EventService {
      * @return a {@link Slice} of {@link EventRegistration} objects representing the attendance list
      */
     Slice<EventRegistration> getEventAttendanceList(String eventId, int pageNumber, int pageSize);
+
+    /**
+     * Retrieves a random upcoming event. This method selects an event that is scheduled to occur in the future, chosen unpredictably from all available upcoming events.
+     *
+     * @return a random upcoming {@link Event}
+     */
+    Event getRandomUpcomingEvent();
 }

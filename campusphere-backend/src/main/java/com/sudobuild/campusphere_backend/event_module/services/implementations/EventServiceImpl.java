@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Implementation of the {@link EventService} interface.
@@ -322,4 +324,24 @@ public class EventServiceImpl implements EventService {
 
     }
 
+    /**
+     * Retrieves a random upcoming event.
+     *
+     * @return a random upcoming event, or {@code null} if no upcoming events are found
+     */
+    @Override
+    public Event getRandomUpcomingEvent() {
+       // create a list of all upcoming events
+        List<Event> upcomingEvents = eventRepository.findByStatus(EventStatus.UPCOMING);
+
+        if (upcomingEvents.isEmpty()) {
+            return null;
+        }
+
+        // pick a random event from the list
+        Random random = new Random();
+        return upcomingEvents.get(random.nextInt(upcomingEvents.size()));
+    }
+
+    
 }
