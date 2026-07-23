@@ -1,6 +1,11 @@
 
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import '../../auxiliary/constants.dart';
+
 
 
 /// Service responsible for fetching home page data from the backend.
@@ -44,6 +49,31 @@ class HomeFeedService {
       return profilePictureURL;
     } catch (e) {
       debugPrint('[HomeFeedService] Error fetching profile picture URL: $e');
+    }
+    return null;
+  }
+
+  static Future<Map<String, dynamic>?> fetchRandomUpcomingEvent() async {
+    try {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      var response = await http.get(
+        Uri.parse(baseURL + getRandomUpcomingEventEndpoint),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${sharedPreferences.getString("token")}",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint('[HomeFeedService] Random upcoming event: ${response.body}');
+        return jsonDecode(response.body);
+      }
+      else {
+        debugPrint('[HomeFeedService] Error fetching random upcoming event: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      debugPrint('[HomeFeedService] Error fetching random upcoming event: $e');
     }
     return null;
   }

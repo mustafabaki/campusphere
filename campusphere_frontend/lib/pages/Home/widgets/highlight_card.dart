@@ -1,41 +1,49 @@
+import 'package:campusphere_frontend/services/home_feed_service.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:campusphere_frontend/auxiliary/app_theme.dart';
 
-/// Large highlight / hero card on the home page.
-///
-/// Accepts event data to display dynamic content.
-/// Falls back to hardcoded defaults when no parameters are provided.
-class HighlightCard extends StatelessWidget {
-  /// The event title displayed over the hero image.
-  final String title;
 
-  /// The event description shown below the title.
-  final String description;
+class HighlightCard extends StatefulWidget {
 
-  /// URL for the background hero image.
-  final String imageUrl;
+  // TODO: change the type of these props to dynamic, i will use them in the home page
+   String? title;
+   String? description;
+   String? imageUrl;
+   String? category;
+   String? eventTime;
 
-  /// Category chip label (e.g. 'YOUR MAJOR').
-  final String category;
 
-  /// Time chip label (e.g. '⏱ Today, 3:00 PM').
-  final String eventTime;
 
-  const HighlightCard({
-    super.key,
-    this.title = 'CS 401: AI Ethics Symposium',
-    this.description =
-        'Join industry leaders discussing the implications of large language models in modern software development.',
-    this.imageUrl =
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBdZKmsptbSIUBDfAdCa8wMYNu6U0r40N4SZvebBHAvZP1E44QXYqVHFkryB0CkuxgrP_dvT-wDuCZUdsWCo03xcFJKzD4gNIalSIewClCSIFtOY4geEkvVgbyY4LBDLSURVL54cBkK60vgnqJfp5oBZKet-hes1b4vI97R1XYxrclg5gWUQBjTwD6Qt1itAiMNqxZyJDtVVNDMTVF2eiNhhrFEPqUeH8mxiVy6lqD6uqKymt0qS7DhJdrokv6RBzQ8VXawckZcFnY',
-    this.category = 'YOUR MAJOR',
-    this.eventTime = '⏱ Today, 3:00 PM',
-  });
+  @override
+  State<HighlightCard> createState() => _HighlightCardState();
+}
+
+class _HighlightCardState extends State<HighlightCard> {
+
+  @override
+  void initState() {
+    super.initState();
+    // fetch a random event and set the state 
+
+    HomeFeedService.fetchRandomUpcomingEvent().then((event) {
+      if (event != null) {
+        setState(() {
+          widget.title = event['data']['title'];
+          widget.description = event['data']['description'];
+          widget.imageUrl = event['data']['coverImageUrl'];
+          widget.category = event['data']['category'];
+          final dt = DateTime.parse(event['data']['startTime']).toLocal();
+          widget.eventTime = '⏱ ${DateFormat('EEE, MMM d · h:mm a').format(dt)}';
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
+    return  widget.imageUrl == null ? Center(child: CircularProgressIndicator()) : ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(
         height: 280,
@@ -45,7 +53,7 @@ class HighlightCard extends StatelessWidget {
           children: [
             // Background image
             Image.network(
-              imageUrl,
+              widget.imageUrl!,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) =>
                   Container(color: AppColors.primaryContainer),
@@ -78,13 +86,13 @@ class HighlightCard extends StatelessWidget {
                   Row(
                     children: [
                       _Chip(
-                        label: category,
+                        label: widget.category ?? '',
                         bgColor: AppColors.secondaryContainer,
                         textColor: AppColors.onSecondaryContainer,
                       ),
                       const SizedBox(width: 8),
                       _Chip(
-                        label: eventTime,
+                        label: widget.eventTime ?? '',
                         bgColor: Colors.white.withValues(alpha: 0.2),
                         textColor: Colors.white,
                       ),
@@ -92,7 +100,7 @@ class HighlightCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    title,
+                    widget.title ?? '',
                     style: GoogleFonts.lexend(
                       fontSize: 26,
                       fontWeight: FontWeight.w600,
@@ -102,7 +110,7 @@ class HighlightCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    description,
+                    widget.description ?? '',
                     style: GoogleFonts.inter(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,

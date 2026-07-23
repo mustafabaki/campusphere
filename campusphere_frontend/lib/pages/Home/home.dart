@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       });
       HomeFeedService.fetchProfilePictureURL().then((url) {
         setState(() {
-          profileURL = url ?? "";
+           profileURL = url ?? "";
         });
       });
     });
@@ -51,10 +51,10 @@ class _HomePageState extends State<HomePage> {
                   backgroundColor:
                       Colors.blue.shade800, // Background fill color
                   child: Text(
-                    _studentName
-                        .substring(0, 1)
-                        .toUpperCase(), // The user's initials
-                    style: TextStyle(
+                    _studentName.trim().isNotEmpty
+                        ? _studentName.trim()[0].toUpperCase()
+                        : '', // The user's initial
+                    style: const TextStyle(
                       color: Colors.white, // Text color
                       fontSize: 20, // Scale text to fit radius
                       fontWeight: FontWeight.bold,
@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 24),
 
                   // ── Highlight Card ──────────────────────────────
-                  const HighlightCard(),
+                  HighlightCard(),
                   const SizedBox(height: 28),
 
                   // ── For You Feed ────────────────────────────────
