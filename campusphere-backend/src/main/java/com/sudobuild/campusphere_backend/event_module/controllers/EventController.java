@@ -126,7 +126,7 @@ public class EventController {
      */
     @GetMapping("/getAllClubEvents")
     public ResponseEntity<?> getAllClubEvents(@RequestParam String clubId, @RequestParam int pageNumber,
-            @RequestParam int pageSize) {
+                                              @RequestParam int pageSize) {
         try {
             var data = eventService.getAllClubEvents(clubId, pageNumber, pageSize);
             return ResponseEntity.ok(ApiResponse.success(data));
@@ -145,7 +145,7 @@ public class EventController {
      */
     @GetMapping("/getAllDepartmentEvents")
     public ResponseEntity<?> getAllDepartmentEvents(@RequestParam Department department, @RequestParam int pageNumber,
-            @RequestParam int pageSize) {
+                                                    @RequestParam int pageSize) {
         try {
             var data = eventService.getAllEventsOfDepartment(department, pageNumber, pageSize);
             return ResponseEntity.ok(ApiResponse.success(data));
@@ -213,7 +213,7 @@ public class EventController {
      */
     @GetMapping("/getEventAttendees")
     public ResponseEntity<?> getEventAttendees(@RequestParam String eventId, @RequestParam int pageNumber,
-            @RequestParam int pageSize) {
+                                               @RequestParam int pageSize) {
         try {
             var data = eventService.getEventAttendanceList(eventId, pageNumber, pageSize);
             return ResponseEntity.ok(ApiResponse.success(data));
@@ -238,4 +238,20 @@ public class EventController {
         }
     }
 
+    /**
+     * Retrieves a paginated list of all upcoming events.
+     *
+     * @param pageNumber the page number to retrieve (0-indexed)
+     * @param pageSize   the number of events per page
+     * @return a ResponseEntity containing an ApiResponse with a list of all upcoming events
+     */
+    @GetMapping("/getAllUpcomingEvents")
+    public ResponseEntity<?> getAllUpcomingEvents(@RequestParam int pageNumber, @RequestParam int pageSize) {
+        try {
+            var data = eventService.getAllUpcomingEvents(pageNumber, pageSize);
+            return ResponseEntity.ok(ApiResponse.success(data));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
+        }
+    }
 }
