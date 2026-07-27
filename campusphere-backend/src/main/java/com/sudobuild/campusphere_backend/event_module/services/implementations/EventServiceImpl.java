@@ -10,6 +10,7 @@ import com.sudobuild.campusphere_backend.event_module.services.EventService;
 import com.sudobuild.campusphere_backend.student_module.enums.Department;
 import com.sudobuild.campusphere_backend.student_module.repositories.StudentClubRepository;
 import com.sudobuild.campusphere_backend.student_module.repositories.StudentRepository;
+import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -341,6 +342,21 @@ public class EventServiceImpl implements EventService {
         // pick a random event from the list
         Random random = new Random();
         return upcomingEvents.get(random.nextInt(upcomingEvents.size()));
+    }
+
+    /**
+     * Retrieves the first three event registrations for a specific event.
+     *
+     * @param eventId the ID of the event
+     * @return a list of the first three event registrations
+     */
+    @Override
+    public List<EventRegistration> getFirstThreeEventRegistrations(String eventId) {
+        // find the event
+        var event = eventRepository.findById(eventId).orElseThrow(() -> new RuntimeException("Event not found with id: " + eventId));
+
+        // get the first three event registrations for the given event id
+        return eventRegistrationRepository.findByEvent(event, Limit.of(3));
     }
 
 }

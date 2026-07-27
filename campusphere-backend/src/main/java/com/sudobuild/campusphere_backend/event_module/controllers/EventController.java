@@ -40,7 +40,8 @@ public class EventController {
      *
      * @param pageNumber the page number to retrieve (zero-based)
      * @param pageSize   the number of events per page
-     * @return a ResponseEntity containing an ApiResponse with the upcoming events or an error message
+     * @return a ResponseEntity containing an ApiResponse with the upcoming events
+     *         or an error message
      */
     @GetMapping("/getUpcomingEvents")
     public ResponseEntity<?> getUpcomingEvents(@RequestParam int pageNumber, @RequestParam int pageSize) {
@@ -56,7 +57,8 @@ public class EventController {
      * Retrieves the details of a specific event by its ID.
      *
      * @param eventId the unique identifier of the event
-     * @return a ResponseEntity containing an ApiResponse with the event details or an error message
+     * @return a ResponseEntity containing an ApiResponse with the event details or
+     *         an error message
      */
     @GetMapping("/getEvent")
     public ResponseEntity<?> getEvent(@RequestParam String eventId) {
@@ -72,7 +74,8 @@ public class EventController {
      * Creates a new event.
      *
      * @param event the event details to be created
-     * @return a ResponseEntity containing an ApiResponse with the created event or an error message
+     * @return a ResponseEntity containing an ApiResponse with the created event or
+     *         an error message
      */
     @PostMapping("/createEvent")
     public ResponseEntity<?> createEvent(@RequestBody Event event) {
@@ -88,7 +91,8 @@ public class EventController {
      * Updates an existing event.
      *
      * @param event the event details to be updated
-     * @return a ResponseEntity containing an ApiResponse with the updated event or an error message
+     * @return a ResponseEntity containing an ApiResponse with the updated event or
+     *         an error message
      */
     @PutMapping("/updateEvent")
     public ResponseEntity<?> updateEvent(@RequestBody Event event) {
@@ -104,7 +108,8 @@ public class EventController {
      * Deletes a specific event by its ID.
      *
      * @param eventId the unique identifier of the event to be deleted
-     * @return a ResponseEntity containing an ApiResponse with a success boolean or an error message
+     * @return a ResponseEntity containing an ApiResponse with a success boolean or
+     *         an error message
      */
     @DeleteMapping("/deleteEvent")
     public ResponseEntity<?> deleteEvent(@RequestParam String eventId) {
@@ -122,11 +127,12 @@ public class EventController {
      * @param clubId     the unique identifier of the club
      * @param pageNumber the page number to retrieve (zero-based)
      * @param pageSize   the number of events per page
-     * @return a ResponseEntity containing an ApiResponse with the club's events or an error message
+     * @return a ResponseEntity containing an ApiResponse with the club's events or
+     *         an error message
      */
     @GetMapping("/getAllClubEvents")
     public ResponseEntity<?> getAllClubEvents(@RequestParam String clubId, @RequestParam int pageNumber,
-                                              @RequestParam int pageSize) {
+            @RequestParam int pageSize) {
         try {
             var data = eventService.getAllClubEvents(clubId, pageNumber, pageSize);
             return ResponseEntity.ok(ApiResponse.success(data));
@@ -141,11 +147,12 @@ public class EventController {
      * @param department the department organizing the events
      * @param pageNumber the page number to retrieve (zero-based)
      * @param pageSize   the number of events per page
-     * @return a ResponseEntity containing an ApiResponse with the department's events or an error message
+     * @return a ResponseEntity containing an ApiResponse with the department's
+     *         events or an error message
      */
     @GetMapping("/getAllDepartmentEvents")
     public ResponseEntity<?> getAllDepartmentEvents(@RequestParam Department department, @RequestParam int pageNumber,
-                                                    @RequestParam int pageSize) {
+            @RequestParam int pageSize) {
         try {
             var data = eventService.getAllEventsOfDepartment(department, pageNumber, pageSize);
             return ResponseEntity.ok(ApiResponse.success(data));
@@ -159,7 +166,8 @@ public class EventController {
      *
      * @param eventId   the unique identifier of the event
      * @param studentId the unique identifier of the student
-     * @return a ResponseEntity containing an ApiResponse with the event registration details or an error message
+     * @return a ResponseEntity containing an ApiResponse with the event
+     *         registration details or an error message
      */
     @PostMapping("/registerToEvent")
     public ResponseEntity<?> registerToEvent(@RequestParam String eventId, @RequestParam String studentId) {
@@ -174,8 +182,10 @@ public class EventController {
     /**
      * Cancels an existing event registration.
      *
-     * @param eventRegistrationId the unique identifier of the event registration to be cancelled
-     * @return a ResponseEntity containing an ApiResponse with the cancelled registration details or an error message
+     * @param eventRegistrationId the unique identifier of the event registration to
+     *                            be cancelled
+     * @return a ResponseEntity containing an ApiResponse with the cancelled
+     *         registration details or an error message
      */
     @PutMapping("/cancelRegistration")
     public ResponseEntity<?> cancelRegistration(@RequestParam String eventRegistrationId) {
@@ -191,7 +201,8 @@ public class EventController {
      * Marks attendance for an event registration.
      *
      * @param eventRegistrationId the unique identifier of the event registration
-     * @return a ResponseEntity containing an ApiResponse with the updated registration details or an error message
+     * @return a ResponseEntity containing an ApiResponse with the updated
+     *         registration details or an error message
      */
     @PutMapping("/markAttendance")
     public ResponseEntity<?> markAttendance(@RequestParam String eventRegistrationId) {
@@ -209,11 +220,12 @@ public class EventController {
      * @param eventId    the unique identifier of the event
      * @param pageNumber the page number to retrieve (zero-based)
      * @param pageSize   the number of attendees per page
-     * @return a ResponseEntity containing an ApiResponse with the list of attendees or an error message
+     * @return a ResponseEntity containing an ApiResponse with the list of attendees
+     *         or an error message
      */
     @GetMapping("/getEventAttendees")
     public ResponseEntity<?> getEventAttendees(@RequestParam String eventId, @RequestParam int pageNumber,
-                                               @RequestParam int pageSize) {
+            @RequestParam int pageSize) {
         try {
             var data = eventService.getEventAttendanceList(eventId, pageNumber, pageSize);
             return ResponseEntity.ok(ApiResponse.success(data));
@@ -222,11 +234,11 @@ public class EventController {
         }
     }
 
-
     /**
      * Retrieves a random upcoming event.
      *
-     * @return a ResponseEntity containing an ApiResponse with a random upcoming event or an error message
+     * @return a ResponseEntity containing an ApiResponse with a random upcoming
+     *         event or an error message
      */
     @GetMapping("/getRandomUpcomingEvent")
     public ResponseEntity<?> getRandomEvent() {
@@ -243,13 +255,33 @@ public class EventController {
      *
      * @param pageNumber the page number to retrieve (0-indexed)
      * @param pageSize   the number of events per page
-     * @return a ResponseEntity containing an ApiResponse with a list of all upcoming events
+     * @return a ResponseEntity containing an ApiResponse with a list of all
+     *         upcoming events
      */
     @GetMapping("/getAllUpcomingEvents")
     public ResponseEntity<?> getAllUpcomingEvents(@RequestParam int pageNumber, @RequestParam int pageSize) {
         try {
             var data = eventService.getAllUpcomingEvents(pageNumber, pageSize);
             return ResponseEntity.ok(ApiResponse.success(data));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
+        }
+    }
+
+    /**
+     * Retrieves the first three event registrations for a specific event.
+     * This is typically used to show a preview of attendees for the event.
+     *
+     * @param eventId the unique identifier of the event
+     * @return a ResponseEntity containing an ApiResponse with the first three event
+     *         registrations or an error message
+     */
+    @GetMapping("/getFirstThreeEventRegistrations")
+    public ResponseEntity<?> getFirstThreeEventRegistrations(@RequestParam String eventId) {
+        try {
+            var data = eventService.getFirstThreeEventRegistrations(eventId);
+            return ResponseEntity.ok(ApiResponse.success(data));
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponse.failure(e.getMessage()));
         }

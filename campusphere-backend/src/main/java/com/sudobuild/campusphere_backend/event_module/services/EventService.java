@@ -3,6 +3,9 @@ package com.sudobuild.campusphere_backend.event_module.services;
 import com.sudobuild.campusphere_backend.event_module.models.Event;
 import com.sudobuild.campusphere_backend.event_module.models.EventRegistration;
 import com.sudobuild.campusphere_backend.student_module.enums.Department;
+
+import java.util.List;
+
 import org.springframework.data.domain.Slice;
 
 /**
@@ -113,4 +116,13 @@ public interface EventService {
      * @return a random upcoming {@link Event}
      */
     Event getRandomUpcomingEvent();
+
+    /**
+     * Retrieves the first three event registrations for a specific event.
+     * This is typically used to show a preview of attendees for the event.
+     *
+     * @param eventId the unique identifier of the event
+     * @return a list containing up to three {@link EventRegistration} objects
+     */
+    List<EventRegistration> getFirstThreeEventRegistrations(String eventId);
 }
