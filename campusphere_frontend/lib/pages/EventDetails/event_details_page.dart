@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../../services/event_details_service.dart';
+
 class EventDetailsPage extends StatelessWidget {
   final Map<String, dynamic> event;
   final String? heroTag;
@@ -19,7 +21,7 @@ class EventDetailsPage extends StatelessWidget {
 
     final title = event['title'] ?? 'No Title';
     final category = event['category'] ?? 'Event';
-    final imageUrl = event['coverImageUrl'] ?? 'https://via.placeholder.com/800x400';
+    final imageUrl = event['coverImageUrl'] ?? 'https://images.unsplash.com/photo-1523580494112-071d384e2005?q=80&w=800&auto=format&fit=crop';
     final description = event['description'] ?? 'No Description provided.';
     final location = event['location'] ?? 'TBA';
     final currentAttendees = event['currentAttendees'] ?? 0;
@@ -189,46 +191,56 @@ class EventDetailsPage extends StatelessWidget {
                               SizedBox(
                                 width: 140, // rough width to hold stacked images
                                 height: 32,
-                                child: Stack(
-                                  children: [
-                                    Positioned(
-                                      left: 0,
-                                      child: _buildAvatar('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop'),
-                                    ),
-                                    Positioned(
-                                      left: 24,
-                                      child: _buildAvatar('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop'),
-                                    ),
-                                    Positioned(
-                                      left: 48,
-                                      child: _buildAvatar('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop'),
-                                    ),
-                                    Positioned(
-                                      left: 72,
-                                      child: _buildAvatar('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop'),
-                                    ),
-                                    Positioned(
-                                      left: 96,
-                                      child: Container(
-                                        width: 32,
-                                        height: 32,
-                                        decoration: BoxDecoration(
-                                          color: surfaceContainerHigh,
-                                          shape: BoxShape.circle,
-                                          border: Border.all(color: surfaceColor, width: 2),
+                                child: FutureBuilder<List<Map<String, dynamic>>?>(
+                                  future: EventDetailsService.fetchFirstThreeEventRegistrations(event['id'] ?? ''),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                      return const Center(
+                                        child: SizedBox(
+                                          width: 24,
+                                          height: 24,
+                                          child: CircularProgressIndicator(strokeWidth: 2),
                                         ),
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          '+124',
-                                          style: GoogleFonts.inter(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.bold,
-                                            color: primaryColor,
+                                      );
+                                    }
+                                    
+                                    final registrations = snapshot.data ?? [];
+                                    if (registrations.isEmpty && currentAttendees == 0) {
+                                      return const SizedBox.shrink();
+                                    }
+
+                                    return Stack(
+                                      children: [
+                                        for (int i = 0; i < registrations.length; i++)
+                                          Positioned(
+                                            left: i * 24.0,
+                                            child: _buildAvatar(registrations[i]['student']?['profilePictureURL'] ?? 'https://ui-avatars.com/api/?name=Student&background=003366&color=fff'),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                                        if (currentAttendees > registrations.length)
+                                          Positioned(
+                                            left: registrations.length * 24.0,
+                                            child: Container(
+                                              width: 32,
+                                              height: 32,
+                                              decoration: BoxDecoration(
+                                                color: surfaceContainerHigh,
+                                                shape: BoxShape.circle,
+                                                border: Border.all(color: surfaceColor, width: 2),
+                                              ),
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                '+${currentAttendees - registrations.length}',
+                                                style: GoogleFonts.inter(
+                                                  fontSize: 10,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: primaryColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    );
+                                  },
                                 ),
                               ),
                               const SizedBox(width: 12),
