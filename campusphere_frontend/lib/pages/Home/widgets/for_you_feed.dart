@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:campusphere_frontend/auxiliary/app_theme.dart';
 import 'package:campusphere_frontend/services/home_feed_service.dart';
+import 'package:campusphere_frontend/pages/EventDetails/event_details_page.dart';
 
 /// "For You" section including the header and the horizontally scrolling feed.
 class ForYouFeed extends StatefulWidget {
@@ -112,15 +113,29 @@ class _ForYouFeedState extends State<ForYouFeed> {
                 }
 
                 final event = _events[index];
+                final heroTag = 'feed-${event['id'] ?? event['coverImageUrl'] ?? index}';
                 return SizedBox(
                   width: 240,
-                  child: FeedCard(
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => EventDetailsPage(
+                            event: event as Map<String, dynamic>,
+                            heroTag: heroTag,
+                          ),
+                        ),
+                      );
+                    },
+                    child: FeedCard(
+                    heroTag: heroTag,
                     imageUrl: event['coverImageUrl'] ?? '',
                     category: event['category'] ?? 'Event',
                     title: event['title'] ?? 'No Title',
                     description: event['description'] ?? 'No Description',
                     metaIcon: Icons.location_on_outlined,
                     metaText: event['location'] ?? 'TBA',
+                  ),
                   ),
                 );
               },
@@ -155,6 +170,7 @@ class ForYouHeader extends StatelessWidget {
 
 /// Feed card used in the "For You" list.
 class FeedCard extends StatelessWidget {
+  final String heroTag;
   final String imageUrl;
   final String category;
   final String title;
@@ -164,6 +180,7 @@ class FeedCard extends StatelessWidget {
 
   const FeedCard({
     super.key,
+    required this.heroTag,
     required this.imageUrl,
     required this.category,
     required this.title,
@@ -192,14 +209,17 @@ class FeedCard extends StatelessWidget {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Image.network(
-                    imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      color: AppColors.surfaceContainer,
-                      child: const Icon(
-                        Icons.image_outlined,
-                        color: AppColors.outlineVariant,
+                  Hero(
+                    tag: heroTag,
+                    child: Image.network(
+                      imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => Container(
+                        color: AppColors.surfaceContainer,
+                        child: const Icon(
+                          Icons.image_outlined,
+                          color: AppColors.outlineVariant,
+                        ),
                       ),
                     ),
                   ),

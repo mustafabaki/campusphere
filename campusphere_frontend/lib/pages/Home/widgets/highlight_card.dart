@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:campusphere_frontend/auxiliary/app_theme.dart';
-
+import 'package:campusphere_frontend/pages/EventDetails/event_details_page.dart';
 
 class HighlightCard extends StatefulWidget {
 
@@ -21,6 +21,7 @@ class HighlightCard extends StatefulWidget {
 }
 
 class _HighlightCardState extends State<HighlightCard> {
+  Map<String, dynamic>? fullEvent;
 
   @override
   void initState() {
@@ -30,6 +31,7 @@ class _HighlightCardState extends State<HighlightCard> {
     HomeFeedService.fetchRandomUpcomingEvent().then((event) {
       if (event != null) {
         setState(() {
+          fullEvent = event['data'];
           widget.title = event['data']['title'];
           widget.description = event['data']['description'];
           widget.imageUrl = event['data']['coverImageUrl'];
@@ -43,6 +45,7 @@ class _HighlightCardState extends State<HighlightCard> {
 
   @override
   Widget build(BuildContext context) {
+    final String heroTag = 'highlight-${fullEvent?['id'] ?? widget.imageUrl}';
     return  widget.imageUrl == null ? Center(child: CircularProgressIndicator()) : ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: SizedBox(
@@ -52,11 +55,14 @@ class _HighlightCardState extends State<HighlightCard> {
           fit: StackFit.expand,
           children: [
             // Background image
-            Image.network(
-              widget.imageUrl!,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) =>
-                  Container(color: AppColors.primaryContainer),
+            Hero(
+              tag: heroTag,
+              child: Image.network(
+                widget.imageUrl!,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) =>
+                    Container(color: AppColors.primaryContainer),
+              ),
             ),
             // Gradient overlay
             Container(
@@ -122,7 +128,18 @@ class _HighlightCardState extends State<HighlightCard> {
                   ),
                   const SizedBox(height: 14),
                   FilledButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      if (fullEvent != null) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => EventDetailsPage(
+                              event: fullEvent!,
+                              heroTag: heroTag,
+                            ),
+                          ),
+                        );
+                      }
+                    },
                     icon: const SizedBox.shrink(),
                     label: Row(
                       mainAxisSize: MainAxisSize.min,
