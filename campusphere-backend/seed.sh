@@ -706,6 +706,75 @@ echo "=========================================="
 curl -s -X GET "$BASE_URL/api/events/getUpcomingEvents?pageNumber=0&pageSize=10" \
   -H "$AUTH_HEADER" | python3 -m json.tool
 
+# ---- Step 26: Generate 200 Bulk Students ----
+echo ""
+echo "=========================================="
+echo ">>> Step 26: Generating 200 more students with clubs and events..."
+echo "=========================================="
+
+DEPARTMENTS=("COMPUTER_ENGINEERING" "ELECTRICAL_ENGINEERING" "MATHEMATICS" "PHYSICS" "BUSINESS_ADMINISTRATION")
+FIRST_NAMES=("Liam" "Noah" "Oliver" "Elijah" "James" "William" "Benjamin" "Lucas" "Henry" "Theodore" "Olivia" "Emma" "Charlotte" "Amelia" "Ava" "Sophia" "Isabella" "Mia" "Evelyn" "Harper")
+LAST_NAMES=("Smith" "Johnson" "Williams" "Brown" "Jones" "Garcia" "Miller" "Davis" "Rodriguez" "Martinez" "Hernandez" "Lopez" "Gonzalez" "Wilson" "Anderson" "Thomas" "Taylor" "Moore" "Jackson" "Martin")
+
+echo "  This may take a minute or two..."
+
+for i in {1..200}; do
+  FNAME="${FIRST_NAMES[$((RANDOM % ${#FIRST_NAMES[@]}))]}"
+  LNAME="${LAST_NAMES[$((RANDOM % ${#LAST_NAMES[@]}))]}"
+  USERNAME="$(echo "${FNAME}.${LNAME}${i}" | tr '[:upper:]' '[:lower:]')"
+  
+  EMAIL="${USERNAME}@university.edu"
+  NAME="$FNAME"
+  SURNAME="$LNAME"
+  PHONE="+1555999$(printf "%04d" $i)"
+  DEPT="${DEPARTMENTS[$((i % 5))]}"
+  
+  # Register
+  curl -s -X POST "$BASE_URL/api/auth/register" \
+    -H "Content-Type: application/json" \
+    -d "{\"email\": \"$EMAIL\", \"password\": \"12345\", \"role\": \"STUDENT\", \"mobileDeviceToken\": \"\"}" > /dev/null
+    
+  # Profile
+  PAYLOAD="{\"name\":\"$NAME\",\"surname\":\"$SURNAME\",\"email\":\"$EMAIL\",\"phone\":\"$PHONE\",\"profilePictureURL\":\"https://i.pravatar.cc/150?u=$EMAIL\",\"department\":\"$DEPT\",\"socialLinks\":[]}"
+  RESPONSE=$(curl -s -X POST "$BASE_URL/api/student/create" -H "Content-Type: application/json" -H "$AUTH_HEADER" -d "$PAYLOAD")
+  SID=$(echo "$RESPONSE" | python3 -c "import sys, json; d=json.load(sys.stdin).get('data'); print(d.get('id') if isinstance(d, dict) else '')" 2>/dev/null)
+  
+  if [ -n "$SID" ]; then
+    STUDENT_IDS+=("$SID")
+    
+    # Social Links
+    SOCIAL_USERNAME=$(echo "${FNAME}${LNAME}${i}" | tr '[:upper:]' '[:lower:]')
+    curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=$SID&url=https://linkedin.com/in/$SOCIAL_USERNAME&platform=LINKEDIN" -H "$AUTH_HEADER" > /dev/null
+    curl -s -X POST "$BASE_URL/api/student/addSocialLinkToStudent?studentId=$SID&url=https://github.com/$SOCIAL_USERNAME&platform=GITHUB" -H "$AUTH_HEADER" > /dev/null
+    
+    # Join a random club
+    if [ ${#CLUB_IDS[@]} -gt 0 ]; then
+      CID_INDEX=$(($RANDOM % ${#CLUB_IDS[@]}))
+      curl -s -X POST "$BASE_URL/api/clubs/${CLUB_IDS[$CID_INDEX]}/members/$SID" -H "Content-Type: application/json" -H "$AUTH_HEADER" -d '"MEMBER"' > /dev/null
+    fi
+    
+    # Register to a random club event
+    if [ ${#EVENT_IDS[@]} -gt 0 ]; then
+      EID_INDEX=$(($RANDOM % ${#EVENT_IDS[@]}))
+      REG_RESP=$(curl -s -X POST "$BASE_URL/api/events/registerToEvent?eventId=${EVENT_IDS[$EID_INDEX]}&studentId=$SID" -H "$AUTH_HEADER")
+      RID=$(echo "$REG_RESP" | python3 -c "import sys, json; d=json.load(sys.stdin).get('data'); print(d.get('id') if isinstance(d, dict) else '')" 2>/dev/null)
+      if [ -n "$RID" ]; then REGISTRATION_IDS+=("$RID"); fi
+    fi
+    
+    # Register to a random department event
+    if [ ${#DEPT_EVENT_IDS[@]} -gt 0 ]; then
+      DEID_INDEX=$(($RANDOM % ${#DEPT_EVENT_IDS[@]}))
+      REG_RESP=$(curl -s -X POST "$BASE_URL/api/events/registerToEvent?eventId=${DEPT_EVENT_IDS[$DEID_INDEX]}&studentId=$SID" -H "$AUTH_HEADER")
+      RID=$(echo "$REG_RESP" | python3 -c "import sys, json; d=json.load(sys.stdin).get('data'); print(d.get('id') if isinstance(d, dict) else '')" 2>/dev/null)
+      if [ -n "$RID" ]; then REGISTRATION_IDS+=("$RID"); fi
+    fi
+  fi
+  
+  if [ $((i % 20)) -eq 0 ]; then
+    echo "  ...Created $i / 200 bulk students"
+  fi
+done
+
 echo ""
 echo "=========================================="
 echo " Seeding Complete!"
