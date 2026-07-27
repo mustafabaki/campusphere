@@ -17,13 +17,12 @@ public class StudentServiceImpl implements StudentService {
     private final SocialLinkRepository socialLinkRepository;
     private final StudentMapper studentMapper;
 
-
-    public StudentServiceImpl(StudentRepository studentRepository,  SocialLinkRepository socialLinkRepository, StudentMapper studentMapper) {
+    public StudentServiceImpl(StudentRepository studentRepository, SocialLinkRepository socialLinkRepository,
+            StudentMapper studentMapper) {
         this.studentRepository = studentRepository;
         this.socialLinkRepository = socialLinkRepository;
         this.studentMapper = studentMapper;
     }
-
 
     @Override
     public StudentResponseDTO create(StudentCreateDTO student) {
@@ -41,21 +40,23 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteStudent(String id) {
         try {
-             Student student = studentRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
+            Student student = studentRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
             studentRepository.deleteById(id);
         } catch (Exception e) {
             throw new RuntimeException("Student not found with id: " + id);
         }
-        
+
     }
 
     @Override
     public StudentResponseDTO updateStudent(String id, StudentCreateDTO student) {
         // fetch the existing student
-        Student existingStudent = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
+        Student existingStudent = studentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + id));
 
-        // update the fields of the existing student with the new values from the DTO (only if they are not null)
+        // update the fields of the existing student with the new values from the DTO
+        // (only if they are not null)
         if (student.getName() != null) {
             existingStudent.setName(student.getName());
         }
@@ -84,7 +85,8 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentResponseDTO addSocialLinkToStudent(String studentId, String url, SocialMediaPlatform platform) {
         // find the student
-        Student student = studentRepository.findById(studentId).orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
 
         // create the social link
         SocialLink socialLink = new SocialLink();

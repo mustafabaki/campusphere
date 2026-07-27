@@ -30,6 +30,7 @@ class LoginFunctions {
       await PushNotificationService.registerDeviceToken();
 
       // fetch the name of the user and save it to the SharedPreferences
+      // Also fetch other information about the user and save them to the SharedPreferences
       // (must happen BEFORE navigation so the home page can read it)
       final uri = Uri.parse(
         baseURL + studentByEmailEndpoint,
@@ -44,8 +45,29 @@ class LoginFunctions {
       );
 
       if (usernameResponse.statusCode == 200) {
-        final usernameResult = jsonDecode(usernameResponse.body);
-        sharedPreferences.setString("name", usernameResult["data"]["name"]);
+        final userInformationResult = jsonDecode(usernameResponse.body);
+
+        // save the name of the user...
+        sharedPreferences.setString("name", userInformationResult["data"]["name"]);
+
+        // save the surname of the user...
+        sharedPreferences.setString("surname", userInformationResult["data"]["surname"]);
+
+        // save user id...
+        sharedPreferences.setString("userId", userInformationResult["data"]["id"]);
+
+        // save user email...
+        sharedPreferences.setString("email", userInformationResult["data"]["email"]);
+
+        // save user phone number...
+        sharedPreferences.setString("phone", userInformationResult["data"]["phone"]);
+
+        // save student department...
+        sharedPreferences.setString("department", userInformationResult["data"]["department"]);
+
+        // save profile image url...
+        sharedPreferences.setString("profilePictureURL", userInformationResult["data"]["profilePictureURL"]);
+        
       }
 
       // Navigate to the main application shell

@@ -16,3 +16,5 @@ String get baseURL {
 const String loginEndpoint = "/api/auth/login";
 const String deviceTokenEndpoint = "/api/auth/device-token";
 const String studentByEmailEndpoint = "/api/student/getStudentByEmail";
+const String getRandomUpcomingEventEndpoint = "/api/events/getRandomUpcomingEvent";
+const String getAllUpcomingEventsEndpoint = "/api/events/getAllUpcomingEvents";

@@ -1,6 +1,11 @@
 
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import '../../auxiliary/constants.dart';
+
 
 
 /// Service responsible for fetching home page data from the backend.
@@ -24,6 +29,84 @@ class HomeFeedService {
       return name;
     } catch (e) {
       debugPrint('[HomeFeedService] Error fetching student name: $e');
+    }
+    return null;
+  }
+
+  /// Retrieves the student's profile picture URL from local storage.
+  ///
+  /// Reads the `"profilePictureURL"` key from [SharedPreferences] and returns its value.
+  ///
+  /// Returns the profile picture URL as a [String], or `null` if the URL
+  /// is not stored or an error occurs during retrieval.
+  static Future<String?> fetchProfilePictureURL() async {
+    try {
+      SharedPreferences sharedPreferences =
+          await SharedPreferences.getInstance();
+
+      // fetch the profile picture URL of the user from the SharedPreferences...
+      String? profilePictureURL = sharedPreferences.getString("profilePictureURL");
+      return profilePictureURL;
+    } catch (e) {
+      debugPrint('[HomeFeedService] Error fetching profile picture URL: $e');
+    }
+    return null;
+  }
+
+  /// Fetches a random upcoming event from the server.
+  ///
+  /// Makes an authenticated HTTP GET request to retrieve the event data.
+  /// Requires a valid authentication token stored in [SharedPreferences].
+  ///
+  /// Returns a [Map] containing the event details if the request is successful (HTTP 200).
+  /// Returns `null` if the request fails, returns a non-200 status code, or an error occurs.
+  static Future<Map<String, dynamic>?> fetchRandomUpcomingEvent() async {
+    try {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      var response = await http.get(
+        Uri.parse(baseURL + getRandomUpcomingEventEndpoint),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${sharedPreferences.getString("token")}",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint('[HomeFeedService] Random upcoming event: ${response.body}');
+        return jsonDecode(response.body);
+      }
+      else {
+        debugPrint('[HomeFeedService] Error fetching random upcoming event: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      debugPrint('[HomeFeedService] Error fetching random upcoming event: $e');
+    }
+    return null;
+  }
+
+
+  static Future<Map<String, dynamic>?> fetchAllUpcomingEvents(int pageNumber, int pageSize) async {
+    try {
+      SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+      var response = await http.get(
+        Uri.parse("$baseURL$getAllUpcomingEventsEndpoint?pageNumber=$pageNumber&pageSize=$pageSize"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer ${sharedPreferences.getString("token")}",
+        },
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint('[HomeFeedService] All upcoming events: ${response.body}');
+        return jsonDecode(response.body);
+      }
+      else {
+        debugPrint('[HomeFeedService] Error fetching all upcoming events: ${response.body}');
+        return null;
+      }
+    } catch (e) {
+      debugPrint('[HomeFeedService] Error fetching all upcoming events: $e');
     }
     return null;
   }
